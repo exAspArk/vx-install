@@ -1,7 +1,5 @@
-python:
-  - 2.7
+language: c
 
-install: false
+before_script: "env -i HOME=/tmp PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND scripts/bootstrap.sh"
 
-before_script: "env -i PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND scripts/bootstrap.sh"
-script: "cd ./ansible && sudo env -i ANSIBLE_FORCE_COLOR=1 PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND ansible-playbook --skip-tags=docker -c chroot -i testing site.yml"
+script: "cd ./ansible && sudo env -i HOME=/tmp ANSIBLE_FORCE_COLOR=1 PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND ansible-playbook --skip-tags=docker -c chroot -i testing site.yml"
