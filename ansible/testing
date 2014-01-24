@@ -1,11 +1,11 @@
 [vexor-mq]
-/tmp/precise-chroot-mq
+/tmp/chroot-mq
 
 [vexor-web]
-/tmp/precise-chroot-web
+/tmp/chroot-web
 
 [vexor-worker]
-/tmp/precise-chroot-worker
+/tmp/chroot-worker
 
 [vexor:children]
 vexor-mq

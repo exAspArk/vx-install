@@ -42,14 +42,14 @@ sudo chroot $IMAGE apt-get -qqy update >> $LOG
 notice "install packages in chroot"
 sudo chroot $IMAGE apt-get -qqy install python python-apt python-pycurl >> $LOG
 
-copy_image $IMAGE-mq
-mount_all $IMAGE-mq
+copy_image /tmp/chroot-mq
+mount_all /tmp/chroot-mq
 
-copy_image $IMAGE-web
-mount_all $IMAGE-web
+copy_image /tmp/chroot-web
+mount_all /tmp/chroot-web
 
-copy_image $IMAGE-worker
-mount_all $IMAGE-worker
+copy_image /tmp/chroot-worker
+mount_all /tmp/chroot-worker
 
 notice "run ansible setup"
 ( cd ./ansible && sudo -E ansible -v -c chroot -i testing all -m setup >> $LOG )
