@@ -1,0 +1,5 @@
+erlang_install:
+  package: 'erlang-nox'
+  debian:
+    repo: "deb http://packages.erlang-solutions.com/debian {{ ansible_distribution_release }} contrib"
+    key: "http://packages.erlang-solutions.com/debian/erlang_solutions.asc"

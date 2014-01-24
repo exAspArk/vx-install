@@ -1,0 +1,8 @@
+- name: add docker apt repo key
+  apt_key: url={{ docker_install.ubuntu.key }}
+
+- name: add docker apt repo
+  apt_repository: repo="{{ docker_install.ubuntu.repo }}"
+
+- name: install docker package
+  apt: pkg="lxc-docker-{{ docker_install_version }}"

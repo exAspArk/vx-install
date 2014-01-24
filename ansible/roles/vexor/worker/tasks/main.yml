@@ -1,0 +1,31 @@
+- name: create user
+  action: user
+  args: vexor_worker.user
+
+- name: checkout worker repo
+  action: git
+  args: vexor_worker.repo
+  register: result
+
+- name: run bundler
+  shell: >
+    /opt/vexor/bin/bundle install --without development --path vendor/ chdir={{vexor_worker.repo.dest}}
+  when: result|changed
+
+- name: create log dir
+  file:  path="{{ vexor_worker.service.log }}" state=directory owner={{ vexor_worker.user.name }}
+
+- name: create /etc/vexor dir
+  file: path="/etc/vexor" state=directory owner={{ vexor_worker.user.name }}
+
+- name: create /etx/vexor/ci
+  template: dest=/etc/vexor/ci src="env.j2" owner={{ vexor_worker.user.name }}
+
+- name: create /opt/vexor/sv/worker/log dir
+  file: path="/opt/vexor/sv/worker/log" state=directory
+
+- name: create runit log service file
+  template: dest=/opt/vexor/sv/worker/log/run src="runit_log.j2" mode=0755
+
+- name: create runit service file
+  template: dest=/opt/vexor/sv/worker/run src="runit_service.j2" mode=0755

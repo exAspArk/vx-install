@@ -1,0 +1,16 @@
+- name: process vhosts
+  action: rabbitmq_vhost
+  args: item
+  with_items: rabbitmq_deploy_vhosts
+
+- name: process users
+  action: rabbitmq_user
+  args: item
+  with_items: rabbitmq_deploy_users
+
+- name: process plugins
+  action: rabbitmq_plugin
+  args: rabbitmq_deploy_plugin
+
+- name: remove guest user
+  rabbitmq_user: name=guest state=absent

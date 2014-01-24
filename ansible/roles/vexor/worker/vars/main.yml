@@ -1,0 +1,22 @@
+vexor_worker:
+  user:
+    name: vx-worker
+    comment: "vexor worker daemon"
+    groups: "docker"
+    createhome: false
+    system: true
+    home: "/var/lib/vexor/worker"
+
+  repo:
+    repo: "https://github.com/vexor/vx-worker.git"
+    force: true
+    dest: "/var/lib/vexor/worker/repo"
+    version: "{{ vexor_worker_version }}"
+    update: true
+
+  service:
+    user: "vx-worker"
+    work_dir: "/var/lib/vexor/worker"
+    command: "/var/lib/vexor/worker/repo/bin/vx-worker"
+    log: "/var/log/vexor/worker"
+

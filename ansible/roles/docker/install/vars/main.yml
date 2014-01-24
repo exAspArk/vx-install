@@ -1,0 +1,4 @@
+docker_install:
+  ubuntu:
+    repo: "deb http://mirror.yandex.ru/mirrors/docker/ docker main"
+    key: "http://mirror.yandex.ru/mirrors/docker/DOCKER-GPG-KEY"

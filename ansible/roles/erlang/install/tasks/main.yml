@@ -1,0 +1,8 @@
+- name: add erlang-solutions apt repo key
+  apt_key: url={{ erlang_install.debian.key }}
+
+- name: add erlang-solutions apt repo
+  apt_repository: repo="{{ erlang_install.debian.repo }}"
+
+- name: install erlang
+  apt: pkg="{{ erlang_install.package }}={{ erlang_install_version }}"

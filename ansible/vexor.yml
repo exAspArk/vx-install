@@ -1,0 +1,9 @@
+---
+- hosts: vexor-worker
+  roles:
+    - vexor/worker
+
+- hosts: vexor-mq
+  roles:
+    - rabbitmq/deploy
+

@@ -1,0 +1,9 @@
+- name: add rabbitmq apt repo key
+  apt_key: url={{ rabbitmq_install.debian.key }}
+
+- name: add rabbitmq apt repo
+  apt_repository: repo="{{ rabbitmq_install.debian.repo }}"
+
+- name: install rabbitmq
+  apt: pkg={{ item }}
+  with_items: rabbitmq_install.package
