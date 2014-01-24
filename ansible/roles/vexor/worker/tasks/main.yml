@@ -2,34 +2,48 @@
   group: name=docker system=yes
 
 - name: create user
-  action: user
-  args: vexor_worker.user
+  user: >
+    name={{ vexor_worker_user }} comment="Vexor Worker" groups=docker
+    createhome=false system=true home={{ vexor_worker_home }}
 
-- name: checkout repo
-  action: git
-  args: vexor_worker.repo
+- name: install required packages
+  apt: pkg={{ item }}
+  with_items:
+    - "vx-embeded-ruby-2.0"
+    - "vx-embeded-bundler-2.0"
+  notify: restart vx-worker service
+
+- name: clone repo
+  git: >
+    repo="https://github.com/vexor/vx-worker.git"
+    dest={{ vexor_worker_home }}
+    version={{ vexor_worker_version }}
+    update=true force=true
   register: result
+  notify: restart vx-worker service
 
-- name: change owner of repo
-  file: dest={{ vexor_worker_home }} owner={{ vexor_worker.user.name }} recurse=yes
+- name: change owner
+  file: >
+    dest={{ vexor_worker_home }} recurse=yes state=directory
+    owner={{ vexor_worker_user }}
   when: result | changed
 
 - name: run bundler
+  sudo_user: "{{ vexor_worker_user }}"
   shell: >
-    {{ vexor_common_bundle_install }} chdir={{ vexor_worker_home }}
+    chdir={{ vexor_worker_home }}
+    env PATH={{ vexor_worker_home }}:$PATH {{ vexor_bin_dir }}/bundle install --without test --path=vendor
   when: result | changed
-  sudo: true
-  sudo_user: "{{ vexor_worker.user.name }}"
-
-- name: create directories
-  file: >
-    path={{ item }} state=directory owner={{ vexor_worker.user.name }}
-  with_items:
-    -  "/etc/vexor"
 
 - name: create files
   template: >
-    dest={{ item.dest }} src={{ item.src }} owner={{ vexor_worker.user.name }} mode={{ item.mode }}
+    dest={{ item.dest }} src={{ item.src }}
+    owner={{ vexor_worker_user }} mode={{ item.mode }}
   with_items:
+    - { dest: "{{ vexor_bin_dir}}/worker", src: "worker.j2", mode: "0755" }
     - { dest: "/etc/vexor/ci", src: "env.j2", mode: "0640" }
     - { dest: "/etc/init/vx-worker.conf", src: "upstart.j2", mode: "0755" }
+  notify: restart vx-worker service
+
+- name: start vx-worker service
+  service: name=vx-worker state=started enabled=yes

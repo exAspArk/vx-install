@@ -7,8 +7,3 @@
 - name: install requred packages
   apt: pkg={{ item }}
   with_items: vexor_common.ubuntu.packages
-
-- name: install vexor packages
-  apt: pkg={{ item }} state=latest
-  with_items: vexor_common_packages
-
