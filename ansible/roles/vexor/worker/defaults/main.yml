@@ -1,7 +1,3 @@
 vexor_worker_version: "HEAD"
 vexor_workers_to_run: "{{ ansible_processor_cores }}"
 vexor_worker_docker_image: "dmexe/precise"
-
-airbrake_secret:
-  api_key: null
-  host: null

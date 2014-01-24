@@ -1,7 +1,3 @@
-vexor_common_packages:
-  - "vx-embeded-bundler-2.0"
-  - "vx-embeded-runit"
-
 vexor_common:
     ubuntu:
       repo: "deb http://download.opensuse.org/repositories/home:/dmexe:/vexor/xUbuntu_{{ ansible_distribution_version }} /"

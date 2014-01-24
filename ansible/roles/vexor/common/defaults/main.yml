@@ -1,4 +1,7 @@
 airbrake_api_key: null
 airbrake_host: null
 
+vexor_common_packages:
+  - "vx-embeded-bundler-2.0"
+  - "vx-embeded-runit"
 

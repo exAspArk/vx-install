@@ -1,0 +1,13 @@
+[vexor-mq]
+/tmp/precise-chroot-mq
+
+[vexor-web]
+/tmp/precise-chroot-web
+
+[vexor-worker]
+/tmp/precise-chroot-worker
+
+[vexor:children]
+vexor-mq
+vexor-worker
+vexor-web

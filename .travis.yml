@@ -1,0 +1,7 @@
+python:
+  - 2.7
+
+install: false
+
+before_script: "scripts/bootstrap.sh"
+script: "cd ./ansible && sudo -E ansible-playbook -v -c chroot -i testing site.yml"
