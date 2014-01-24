@@ -10,25 +10,28 @@
   args: vexor_worker.repo
   register: result
 
+- name: symlink worker script
+  file: >
+    src={{ vexor_worker_home }}/bin/vx-worker dest={{ vexor_worker.command }} state=link
+
 - name: run bundler
   shell: >
-    env PATH={{ vexor_worker.bundle.path }} {{ vexor_worker.bundle.install }} chdir={{ vexor_worker.repo.dest }}
+    {{ vexor_common_bundle_install }} chdir={{ vexor_worker_home }}
   when: result|changed
 
-- name: create log dir
-  file:  path="{{ vexor_worker.service.log }}" state=directory owner={{ vexor_worker.user.name }}
+- name: create directories
+  file: >
+    path={{ item }} state=directory owner={{ vexor_worker.user.name }}
+  with_items:
+    - { vexor_worker.sv_dir }
+    - { '%(vexor_worker.sv_dir)/log' }
+    - { vexor_worker.log_dir }
+    - { "/etc/vexor" }
 
-- name: create /etc/vexor dir
-  file: path="/etc/vexor" state=directory owner={{ vexor_worker.user.name }}
-
-- name: create /etx/vexor/ci
-  template: dest=/etc/vexor/ci src="env.j2" owner={{ vexor_worker.user.name }}
-
-- name: create /opt/vexor/sv/worker/log dir
-  file: path="/opt/vexor/sv/worker/log" state=directory
-
-- name: create runit log service file
-  template: dest=/opt/vexor/sv/worker/log/run src="runit_log.j2" mode=0755
-
-- name: create runit service file
-  template: dest=/opt/vexor/sv/worker/run src="runit_service.j2" mode=0755
+- name: create files
+  template: >
+    dest={{ item.dest }} src={{ item.src }} owner={{ vexor_worker.user.name }} mode={{ item.mode }}
+  with_items:
+    - { dest: '/etc/vexor/ci', src: "env.j2", mode: 0640 }
+    - { dest: '%(vexor_worker_sv_dir)/run', src: "runit_service.j2", mode: 0755 }
+    - { dest: '%(vexor_worker_sv_dir)/log/run', src: "runit_log.j2", mode: 0755 }

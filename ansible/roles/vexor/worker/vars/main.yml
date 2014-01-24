@@ -1,27 +1,21 @@
 vexor_worker:
-  bundle:
-    path: "/opt/vexor/bin:$PATH"
-    install: >
-      /opt/vexor/bin/bundle install --without development --path vendor/
+
+  command: "{{ vexor_common_bin_dir }}/worker"
+  work_dir: "/opt/vexor/worker"
+  log_dir: "{{ vexor_common_log_dir }}/worker"
+  sv_dir: "{{ vexor_common_sv_dir }}/worker"
 
   user:
-    name: vx-worker
+    name: "vx-worker"
     comment: "vexor worker daemon"
     groups: "docker"
     createhome: false
     system: true
-    home: "/var/lib/vexor/worker"
+    home: "{{ vexor_worker_home }}"
 
   repo:
     repo: "https://github.com/vexor/vx-worker.git"
     force: true
-    dest: "/var/lib/vexor/worker/repo"
+    dest: "{{ vexor_worker_home }}"
     version: "{{ vexor_worker_version }}"
     update: true
-
-  service:
-    user: "vx-worker"
-    work_dir: "/var/lib/vexor/worker"
-    command: "/var/lib/vexor/worker/repo/bin/vx-worker"
-    log: "/var/log/vexor/worker"
-

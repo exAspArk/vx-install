@@ -1,3 +1,4 @@
 vexor_worker_version: "HEAD"
-vexor_workers_to_run: "{{ ansible_processor_cores }}"
+vexor_worker_num_workers: "{{ ansible_processor_cores }}"
 vexor_worker_docker_image: "dmexe/precise"
+vexor_worker_home: "/opt/vexor/worker"

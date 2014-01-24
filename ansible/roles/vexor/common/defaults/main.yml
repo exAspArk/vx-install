@@ -5,3 +5,9 @@ vexor_common_packages:
   - "vx-embeded-bundler-2.0"
   - "vx-embeded-runit"
 
+vexor_common_bin_dir: "/opt/vexor/bin"
+vexor_common_log_dir: "/opt/vexor/log"
+vexor_common_sv_dir: "/opt/vexor/sv"
+
+vexor_common_bundle_install: >
+  /opt/vexor/bin/bundle install --without development test --path vendor/
