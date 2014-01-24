@@ -3,11 +3,11 @@
 
 - name: create user
   user: >
-    name={{ vexor_worker_user }} comment="Vexor Worker" groups=docker
-    createhome=false system=true home={{ vexor_worker_home }}
+    name={{ vx_user }} comment="Vexor Worker" groups=docker
+    createhome=false system=true home={{ vx_home }}/worker
 
-- name: create /etc/vexor
-  file: dest=/etc/vexor state=directory owner={{ vexor_worker_user }} mode=0750
+- name: create etc dir
+  file: dest={{ vx_etc_path }} state=directory owner={{ vx_user }} mode=0750
 
 - name: install required packages
   apt: pkg={{ item }}
@@ -19,34 +19,33 @@
 - name: clone repo
   git: >
     repo="https://github.com/vexor/vx-worker.git"
-    dest={{ vexor_worker_home }}
-    version={{ vexor_worker_version }}
+    dest={{ vx_home }}/worker version={{ vx_version }}
     update=true force=true
   register: result
   notify: restart vx-worker service
 
 - name: change owner
   file: >
-    dest={{ vexor_worker_home }} recurse=yes state=directory
-    owner={{ vexor_worker_user }}
+    dest={{ vx_home }}/worker recurse=yes state=directory owner={{ vx_user }}
   when: result | changed
 
 - name: run bundler
-  sudo_user: "{{ vexor_worker_user }}"
+  sudo_user: "{{ vx_user }}"
   shell: >
-    chdir={{ vexor_worker_home }}
-    env PATH={{ vexor_worker_home }}:$PATH {{ vexor_bin_dir }}/bundle install --without test --path=vendor
+    chdir={{ vx_home }}/worker
+    env PATH={{ vx_home }}:$PATH {{ vx_bundle }} install --without test --path=vendor
   when: result | changed
 
 - name: create files
   template: >
     dest={{ item.dest }} src={{ item.src }}
-    owner={{ vexor_worker_user }} mode={{ item.mode }}
+    owner={{ vx_user }} mode={{ item.mode }}
   with_items:
-    - { dest: "{{ vexor_bin_dir}}/worker", src: "worker.j2", mode: "0755" }
-    - { dest: "/etc/vexor/ci", src: "env.j2", mode: "0640" }
-    - { dest: "/etc/init/vx-worker.conf", src: "upstart.j2", mode: "0755" }
+    - { dest: "{{ vx_home}}/bin/worker", src: "worker.j2", mode: "0755" }
+    - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0640" }
+    - { dest: "/etc/init/{{ vx_service }}.conf", src: "upstart.j2", mode: "0755" }
   notify: restart vx-worker service
 
 - name: start vx-worker service
-  service: name=vx-worker state=started enabled=yes
+  service: name={{ vx_service }} state=started enabled=yes
+

@@ -1,10 +1,10 @@
-- name: add vexor apt repo key
-  apt_key: url="{{ vexor_common.ubuntu.key }}"
+---
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
-- name: add vexor apt repo
-  apt_repository: repo="{{ vexor_common.ubuntu.repo }}" state=present
-
-- name: install requred packages
+- name: install required packages
   apt: pkg={{ item }}
-  with_items: vexor_common.ubuntu.packages
-
+  with_items:
+    - "build-essential"
+    - "git-core"
+    - "libxml2-dev"

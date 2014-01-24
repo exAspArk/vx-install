@@ -1,9 +1,9 @@
 airbrake_api_key: null
 airbrake_host: null
 
-vexor_packages:
-  - "vx-embeded-ruby-2.0"
-  - "vx-embeded-bundler-2.0"
+vx_home: "/opt/vexor"
+vx_etc_path: "/etc/vexor"
 
-vexor_etc_dir: "/etc/vexor"
-vexor_bin_dir: "/opt/vexor/bin"
+vx_gem: "{{ vx_home }}/bin/gem"
+vx_bundle: "{{ vx_home }}/bin/bundle"
+vx_ruby: "{{ vx_home }}/bin/ruby"

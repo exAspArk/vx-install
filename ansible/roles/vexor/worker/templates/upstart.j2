@@ -8,11 +8,11 @@ respawn
 console log
 
 script
-  home={{ vexor_worker_home }}
-  user={{ vexor_worker_user }}
-  command="{{ vexor_bin_dir }}/bundle exec {{ vexor_worker_home }}/bin/vx-worker"
+  home={{ vx_home }}/worker
+  user={{ vx_user }}
+  command="{{ vx_bundle }} exec {{ vx_home }}/worker/bin/vx-worker"
 
-  export PATH={{ vexor_bin_dir }}:$PATH
+  export PATH={{ vx_home }}/bin:$PATH
 
   chdir $home
   exec su -s /bin/sh -c "PATH=$PATH exec $command" $user
