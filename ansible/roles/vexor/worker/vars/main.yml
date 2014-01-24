@@ -1,10 +1,5 @@
 vexor_worker:
 
-  command: "{{ vexor_common_bin_dir }}/worker"
-  work_dir: "/opt/vexor/worker"
-  log_dir: "{{ vexor_common_log_dir }}/worker"
-  sv_dir: "{{ vexor_common_sv_dir }}/worker"
-
   user:
     name: "vx-worker"
     comment: "vexor worker daemon"

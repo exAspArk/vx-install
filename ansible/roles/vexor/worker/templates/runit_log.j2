@@ -1,7 +1,0 @@
-#!/bin/sh
-set -e
-
-LOG={{ vexor_worker.service.log }}
-
-test -d "$LOG" || mkdir -p m2750 "$LOG"
-exec svlogd -s 10000000 "$LOG"

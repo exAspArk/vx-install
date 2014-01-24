@@ -6,8 +6,7 @@ vexor_common_packages:
   - "vx-embeded-runit"
 
 vexor_common_bin_dir: "/opt/vexor/bin"
-vexor_common_log_dir: "/opt/vexor/log"
-vexor_common_sv_dir: "/opt/vexor/sv"
+vexor_common_bundle: "{{ vexor_common_bin_dir }}/bundle"
 
 vexor_common_bundle_install: >
-  /opt/vexor/bin/bundle install --without development test --path vendor/
+  {{ vexor_common_bundle }} install --binstubs=.bin --without test --path vendor/

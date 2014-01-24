@@ -5,33 +5,31 @@
   action: user
   args: vexor_worker.user
 
-- name: checkout worker repo
+- name: checkout repo
   action: git
   args: vexor_worker.repo
   register: result
 
-- name: symlink worker script
-  file: >
-    src={{ vexor_worker_home }}/bin/vx-worker dest={{ vexor_worker.command }} state=link
+- name: change owner of repo
+  file: dest={{ vexor_worker_home }} owner={{ vexor_worker.user.name }} recurse=yes
+  when: result | changed
 
 - name: run bundler
   shell: >
     {{ vexor_common_bundle_install }} chdir={{ vexor_worker_home }}
-  when: result|changed
+  when: result | changed
+  sudo: true
+  sudo_user: "{{ vexor_worker.user.name }}"
 
 - name: create directories
   file: >
     path={{ item }} state=directory owner={{ vexor_worker.user.name }}
   with_items:
-    - { vexor_worker.sv_dir }
-    - { '%(vexor_worker.sv_dir)/log' }
-    - { vexor_worker.log_dir }
-    - { "/etc/vexor" }
+    -  "/etc/vexor"
 
 - name: create files
   template: >
     dest={{ item.dest }} src={{ item.src }} owner={{ vexor_worker.user.name }} mode={{ item.mode }}
   with_items:
-    - { dest: '/etc/vexor/ci', src: "env.j2", mode: 0640 }
-    - { dest: '%(vexor_worker_sv_dir)/run', src: "runit_service.j2", mode: 0755 }
-    - { dest: '%(vexor_worker_sv_dir)/log/run', src: "runit_log.j2", mode: 0755 }
+    - { dest: "/etc/vexor/ci", src: "env.j2", mode: "0640" }
+    - { dest: "/etc/init/vx-worker.conf", src: "upstart.j2", mode: "0755" }
