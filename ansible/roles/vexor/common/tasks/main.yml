@@ -7,3 +7,4 @@
 - name: install requred packages
   apt: pkg={{ item }}
   with_items: vexor_common.ubuntu.packages
+

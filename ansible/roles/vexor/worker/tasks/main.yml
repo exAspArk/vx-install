@@ -6,6 +6,9 @@
     name={{ vexor_worker_user }} comment="Vexor Worker" groups=docker
     createhome=false system=true home={{ vexor_worker_home }}
 
+- name: create /etc/vexor
+  file: dest=/etc/vexor state=directory owner={{ vexor_worker_user }} mode=0750
+
 - name: install required packages
   apt: pkg={{ item }}
   with_items:
