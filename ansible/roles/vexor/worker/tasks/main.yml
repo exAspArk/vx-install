@@ -10,12 +10,6 @@
   args: vexor_worker.repo
   register: result
 
-- name: gem debug
-  shell: >
-    /opt/vexor/bin/ruby --version && /opt/vexor/bin/gem env
-  register: result
-- debug: msg="{{ result.stdout }}"
-
 - name: run bundler
   shell: >
     env PATH={{ vexor_worker.bundle.path }} {{ vexor_worker.bundle.install }} chdir={{ vexor_worker.repo.dest }}
