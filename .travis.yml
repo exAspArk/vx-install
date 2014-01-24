@@ -1,5 +1,9 @@
 language: c
 
-before_script: "env -i HOME=/tmp PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND scripts/bootstrap.sh"
+env:
+  - "DIST=precise"
+  - "DIST=saucy"
+
+before_script: "env -i HOME=/tmp DIST=$DIST PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND scripts/bootstrap.sh"
 
 script: "cd ./ansible && sudo env -i HOME=/tmp ANSIBLE_FORCE_COLOR=1 PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND ansible-playbook --skip-tags=docker -c chroot -i testing site.yml"

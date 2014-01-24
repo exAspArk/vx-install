@@ -1,4 +1,8 @@
 ---
+- hosts: vexor-web
+  roles:
+    - vexor/common
+
 - hosts: vexor-worker
   roles:
     - vexor/worker
