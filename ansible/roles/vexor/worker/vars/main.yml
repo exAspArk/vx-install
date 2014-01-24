@@ -1,4 +1,9 @@
 vexor_worker:
+  bundle:
+    path: "/opt/vexor/bin:$PATH"
+    install: >
+      /opt/vexor/bin/bundle install --without development --path vendor/
+
   user:
     name: vx-worker
     comment: "vexor worker daemon"

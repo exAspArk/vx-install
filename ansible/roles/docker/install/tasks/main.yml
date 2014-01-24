@@ -5,4 +5,5 @@
   apt_repository: repo="{{ docker_install.ubuntu.repo }}"
 
 - name: install docker package
+  tags: docker
   apt: pkg="lxc-docker-{{ docker_install_version }}"

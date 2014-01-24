@@ -3,5 +3,6 @@ vexor_common:
       repo: "deb http://download.opensuse.org/repositories/home:/dmexe:/vexor/xUbuntu_{{ ansible_distribution_version }} /"
       key: "http://download.opensuse.org/repositories/home:/dmexe:/vexor/xUbuntu_{{ ansible_distribution_version }}/Release.key"
       packages:
+        - "build-essential"
         - "git-core"
-
+        - "libxml2-dev"

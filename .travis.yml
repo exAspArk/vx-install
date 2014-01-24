@@ -3,5 +3,5 @@ python:
 
 install: false
 
-before_script: "scripts/bootstrap.sh"
-script: "cd ./ansible && sudo -E ansible-playbook -v -c chroot -i testing site.yml"
+before_script: "env -i PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND scripts/bootstrap.sh"
+script: "cd ./ansible && sudo env -i ANSIBLE_FORCE_COLOR=1 PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND ansible-playbook --skip-tags=docker -c chroot -i testing site.yml"

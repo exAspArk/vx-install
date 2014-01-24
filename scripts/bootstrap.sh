@@ -4,26 +4,52 @@ set -e
 
 DIST=${DIST:-precise}
 IMAGE=/tmp/$DIST-chroot
-ROLES=(mq worker web)
+LOG=/tmp/bootstrap.log
 
-echo "yes" | sudo  add-apt-repository ppa:rquillo/ansible
-sudo apt-get -qy update
-sudo apt-get -qy install ansible debootstrap
+notice () {
+  echo " --> $1"
+}
 
-sudo debootstrap $DIST $IMAGE
-sudo chroot $IMAGE apt-get update
-sudo chroot $IMAGE apt-get -qy install python python-apt python-pycurl
+mount_all () {
+  notice "mount filesystems"
+  sudo mount -t proc proc $1/proc/
+  sudo mount -t sysfs sys $1/sys/
+  sudo mount -o bind /dev $1/dev/
+}
 
-for role in $ROLES ; do
-  sudo cp -r $IMAGE $IMAGE-$role
+copy_image () {
+  notice "build image $1"
+  sudo cp -r $IMAGE $1
+}
 
-  pushd $IMAGE-$role
-    sudo mount -t proc proc proc/
-    sudo mount -t sysfs sys sys/
-    sudo mount -o bind /dev dev/
-  popd
+echo > $LOG
 
-  pushd ./ansible
-    sudo -E ansible -v -c chroot -i testing all -m setup > /dev/null
-  popd
-done
+notice "add ansible ppa"
+echo "yes" | sudo add-apt-repository ppa:rquillo/ansible >> $LOG
+
+notice "apt-get update"
+sudo apt-get -qqy update >> $LOG
+
+notice "install packages"
+sudo apt-get -qqy install ansible debootstrap >> $LOG
+
+notice "run debootstrap in $IMAGE"
+sudo debootstrap $DIST $IMAGE >> $LOG
+
+notice "apt-get update in chroot"
+sudo chroot $IMAGE apt-get -qqy update >> $LOG
+
+notice "install packages in chroot"
+sudo chroot $IMAGE apt-get -qqy install python python-apt python-pycurl >> $LOG
+
+copy_image $IMAGE-mq
+mount_all $IMAGE-mq
+
+copy_image $IMAGE-web
+mount_all $IMAGE-web
+
+copy_image $IMAGE-worker
+mount_all $IMAGE-worker
+
+notice "run ansible setup"
+( cd ./ansible && sudo -E ansible -v -c chroot -i testing all -m setup >> $LOG )
