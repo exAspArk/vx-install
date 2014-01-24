@@ -1,8 +1,4 @@
-- name: add erlang-solutions apt repo key
-  apt_key: url={{ erlang_install.debian.key }}
+---
+- include: ubuntu.yml
+  when: ansible_os_family == 'Debian'
 
-- name: add erlang-solutions apt repo
-  apt_repository: repo="{{ erlang_install.debian.repo }}"
-
-- name: install erlang
-  apt: pkg="{{ erlang_install.package }}={{ erlang_install_version }}"

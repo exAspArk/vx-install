@@ -1,9 +1,7 @@
-- name: add docker apt repo key
-  apt_key: url={{ docker_install.ubuntu.key }}
-
-- name: add docker apt repo
-  apt_repository: repo="{{ docker_install.ubuntu.repo }}"
+---
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
 - name: install docker package
   tags: docker
-  apt: pkg="lxc-docker-{{ docker_install_version }}"
+  apt: pkg="lxc-docker-{{ docker_version }}"

@@ -1,0 +1,6 @@
+- name: add docker apt repo key
+  apt_key: url="http://mirror.yandex.ru/mirrors/docker/DOCKER-GPG-KEY"
+
+- name: add docker apt repo
+  apt_repository: repo="deb http://mirror.yandex.ru/mirrors/docker/ docker main"
+

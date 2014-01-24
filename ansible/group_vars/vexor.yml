@@ -1,7 +1,6 @@
 ---
 
 docker_install_version: "0.7.6"
-erlang_install_version: "1:16.b.3"
 
 vexor_rabbitmq_user: "vexor"
 vexor_rabbitmq_vhost: "vexor"
