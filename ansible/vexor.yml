@@ -1,4 +1,8 @@
 ---
+- hosts: vexor-mq
+  roles:
+    - rabbitmq/deploy
+
 - hosts: vexor-web
   roles:
     - vexor/common
@@ -6,8 +10,3 @@
 - hosts: vexor-worker
   roles:
     - vexor/worker
-
-- hosts: vexor-mq
-  roles:
-    - rabbitmq/deploy
-
