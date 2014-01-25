@@ -3,7 +3,7 @@ vx_mq_user: "vexor"
 vx_mq_host: "{{ groups['vexor-mq'][0] }}"
 vx_mq_plugins: 'rabbitmq_management'
 vx_mq_password: >
-  "{{ lookup('password', '~/.ansible/credentials/vexor/rabbitmq.password length=30 chars=ascii,numbers,digits') }}"
+  {{ lookup('password', '~/.ansible/credentials/vexor/rabbitmq.password length=30 chars=ascii,numbers,digits') }}
 
 rabbitmq_url: "amqp://{{ vx_mq_user }}:{{ vx_mq_password }}@{{ vx_mq_host }}/{{ vx_mq_vhost }}"
 
