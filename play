@@ -13,6 +13,9 @@ case $first in
   "vagrant")
     play "vagrant"
     ;;
+  "testing")
+    play "testing"
+    ;;
   *)
     echo "Usage $0 (vagrant|testing) [options]"
     exit 1
