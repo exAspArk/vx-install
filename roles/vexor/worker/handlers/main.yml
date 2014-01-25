@@ -1,2 +1,2 @@
-- name: restart vx-worker service
+- name: restart service
   service: name={{ vx_service }} state=restarted
