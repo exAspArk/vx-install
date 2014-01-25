@@ -1,0 +1,5 @@
+---
+dependencies:
+  - { role: vexor/common }
+  - { role: postgres/install }
+

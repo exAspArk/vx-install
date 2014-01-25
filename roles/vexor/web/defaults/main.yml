@@ -1,0 +1,4 @@
+vx_version: "HEAD"
+vx_num_workers: "{{ ansible_processor_cores }}"
+vx_user: "vxweb"
+vx_service: "vxweb"

@@ -1,0 +1,5 @@
+- name: install postgres packages
+  apt: pkg={{ item }}
+  with_items:
+    - "postgresql-{{ postgres_version }}"
+    - "postgresql-contrib-{{ postgres_version }}"
