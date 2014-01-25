@@ -1,4 +1,0 @@
----
-rabbitmq_deploy_vhosts: []
-rabbitmq_deploy_users: []
-rabbitmq_deploy_plugin: {}

@@ -1,0 +1,6 @@
+- name: add rabbitmq apt repo key
+  apt_key: url="http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
+
+- name: add rabbitmq apt repo
+  apt_repository: repo="deb http://www.rabbitmq.com/debian/ testing main"
+

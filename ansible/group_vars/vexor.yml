@@ -1,22 +1,9 @@
----
-vexor_rabbitmq_user: "vexor"
-vexor_rabbitmq_vhost: "vexor"
-vexor_rabbitmq_password: "{{ lookup('password', '~/.ansible/credentials/vexor/rabbitmq.password length=30 chars=ascii,numbers,digits,hexdigits') }}"
-vexor_rabbitmq_host: "{{ groups['vexor-mq'][0] }}"
+vx_mq_vhost: "vexor"
+vx_mq_user: "vexor"
+vx_mq_host: "{{ groups['vexor-mq'][0] }}"
+vx_mq_plugins: 'rabbitmq_management'
+vx_mq_password: >
+  "{{ lookup('password', '~/.ansible/credentials/vexor/rabbitmq.password length=30 chars=ascii,numbers,digits') }}"
 
-vexor_rabbitmq_url: "amqp://{{ vexor_rabbitmq_user }}:{{ vexor_rabbitmq_password }}@{{ vexor_rabbitmq_host }}/{{ vexor_rabbitmq_vhost }}"
+rabbitmq_url: "amqp://{{ vx_mq_user }}:{{ vx_mq_password }}@{{ vx_mq_host }}/{{ vx_mq_vhost }}"
 
-rabbitmq_deploy_plugin:
-  names: "rabbitmq_management"
-
-rabbitmq_deploy_vhosts:
-  - name: "{{ vexor_rabbitmq_vhost }}"
-
-rabbitmq_deploy_users:
-  - user: "{{ vexor_rabbitmq_user }}"
-    vhost: "{{ vexor_rabbitmq_vhost }}"
-    password: "{{ vexor_rabbitmq_password }}"
-    configure_priv: ".*"
-    read_priv: ".*"
-    write_priv: ".*"
-    tags: "management"

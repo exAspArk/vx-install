@@ -1,0 +1,8 @@
+- name: create rabbitmq vhost
+  rabbitmq_vhost: name={{ vx_mq_vhost }}
+
+- name: craeate rabbitmq user
+  rabbitmq_user: name={{ vx_mq_user }} vhost={{ vx_mq_vhost }} password={{ vx_mq_password }}
+
+- name: create rabbitmq plugins
+  rabbitmq_plugin: names={{ vx_mq_plugins }}

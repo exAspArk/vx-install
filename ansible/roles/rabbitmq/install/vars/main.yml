@@ -1,5 +1,0 @@
-rabbitmq_install:
-  package: "rabbitmq-server"
-  debian:
-    repo: "deb http://www.rabbitmq.com/debian/ testing main"
-    key: "http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
