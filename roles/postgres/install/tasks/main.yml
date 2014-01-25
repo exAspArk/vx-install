@@ -3,3 +3,14 @@
   with_items:
     - "postgresql-{{ postgres_version }}"
     - "postgresql-contrib-{{ postgres_version }}"
+
+- name: apply listen parameter
+  lineinfile: >
+    dest=/etc/postgresql/{{ postgres_version }}/main/postgresql.conf
+    regexp='listen_addresses'
+    line="listen_addresses = '{{ postgres_listen }}'"
+    state=present
+  notify: restart service
+
+- name: ensure service up and running
+  service: name=postgresql enabled=yes state=started

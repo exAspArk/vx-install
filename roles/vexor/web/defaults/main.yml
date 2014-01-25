@@ -1,4 +1,13 @@
 vx_version: "HEAD"
+
 vx_num_workers: "{{ ansible_processor_cores }}"
 vx_user: "vxweb"
-vx_service: "vxweb"
+
+vx_db_name: "{{ vx_user }}_production"
+vx_db_pool: 50
+vx_db_password_file: >
+  ~/.ansible/credentials/{{ ansible_fqdn }}/{{ vx_user }}.postgres
+vx_db_password: >
+  {{ lookup('password', vx_db_password_file + ' length=30 chars=numbers,digits') }}
+vx_db_url: >
+  postgres://{{ vx_user }}:{{ vx_db_password }}@localhost/{{ vx_db_name }}?pool={{ vx_db_pool }}

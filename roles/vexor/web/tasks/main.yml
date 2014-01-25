@@ -1,0 +1,25 @@
+- name: create user
+  user: >
+    name={{ vx_user }} comment="Vexor Web Worker"
+    createhome=false system=true home={{ vx_home }}/web
+
+- name: install required packages
+  apt: pkg={{ item }}
+  with_items:
+    - "vx-embeded-ruby-2.0"
+    - "vx-embeded-bundler-2.0"
+
+- name: create working directories
+  file: dest={{ item }} state=directory owner={{ vx_user }}
+  with_items:
+    - "{{ vx_etc_path }}"
+    - "{{ vx_home }}/web"
+    - "{{ vx_home }}/web/releases"
+
+- name: clone repo
+  sudo_user: "{{ vx_user }}"
+  git: >
+    repo="https://github.com/vexor/vx-web.git"
+    dest={{ vx_home }}/worker/scm version={{ vx_version }}
+    update=true force=true bare=true
+  register: clone_result
