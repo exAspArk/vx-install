@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+first=$1
+rest=${*:2}
+
+function play() {
+  ansible-playbook $rest -i inv/$1 --sudo site.yml
+}
+
+case $first in
+  "vagrant")
+    play "vagrant"
+    ;;
+  *)
+    echo "Usage $0 (vagrant|testing) [options]"
+    exit 1
+esac
