@@ -13,6 +13,7 @@ vexor-worker
 vexor-web
 
 [vexor:vars]
+host_key_checking=False
 ansible_ssh_user=vagrant
 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
 

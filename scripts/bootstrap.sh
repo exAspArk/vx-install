@@ -52,4 +52,4 @@ copy_image /tmp/chroot-worker
 mount_all /tmp/chroot-worker
 
 notice "run ansible setup"
-( cd ./ansible && sudo -E ansible -v -c chroot -i testing all -m setup >> $LOG )
+sudo -E ansible -v -c chroot -i inv/testing all -m setup >> $LOG

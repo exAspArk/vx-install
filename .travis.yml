@@ -6,4 +6,4 @@ env:
 
 before_script: "env -i HOME=/tmp DIST=$DIST PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND scripts/bootstrap.sh"
 
-script: "sudo env -i HOME=/tmp ANSIBLE_FORCE_COLOR=1 PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND ansible-playbook -v --skip-tags=docker -c chroot -i testing site.yml"
+script: "sudo env -i HOME=/tmp ANSIBLE_FORCE_COLOR=2 PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND ansible-playbook -v --skip-tags=docker -c chroot -i inv/testing site.yml"
