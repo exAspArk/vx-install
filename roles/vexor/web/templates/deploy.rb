@@ -1,27 +1,42 @@
 require 'mina/bundler'
+require 'mina/rails'
 require 'mina/git'
 
 set :version, "{{ vx_version }}"
-set :deploy_to, "{{ vx_home }}/worker"
+set :deploy_to, "{{ vx_home }}/web"
 
-set :domain, 'worker.example.com'
-set :repository, 'git://github.com/vexor/vx-worker.git'
+set :domain, 'web.example.com'
+set :repository, 'git://github.com/vexor/vx-web.git'
 set :branch, 'master'
 
 set :user, '{{ vx_user }}'
 
+set :shared_paths, ['log']
+
 task :environment do
   queue %{
+    echo "-----> Run at $(date)"
     #{ echo_cmd %{export PATH={{ vx_home }}/bin:$PATH} }
   }
 end
 
+task :setup => :environment do
+  queue %[mkdir -p "#{deploy_to}/shared/log"]
+  queue %[chmod g+rx,u+rwx "#{deploy_to}/shared/log"]
+end
+
 desc "Deploys the current version to the server."
-task :deploy => :environment do
+task :deploy => :setup do
   deploy do
     invoke :'git:clone'
-    queue %{
-      bundle install --path=#{deploy_to}/shared/bundle --without test --jobs 4
-    }
+    invoke :'deploy:link_shared_paths'
+    invoke :'bundle:install'
+
+    invoke :'rails:db_migrate'
+    invoke :'rails:assets_precompile'
+
+    to :launch do
+      invoke :'deploy:cleanup'
+    end
   end
 end

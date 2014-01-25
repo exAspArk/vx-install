@@ -3,6 +3,7 @@
   with_items:
     - "postgresql-{{ postgres_version }}"
     - "postgresql-contrib-{{ postgres_version }}"
+    - "python-psycopg2"
 
 - name: apply listen parameter
   lineinfile: >

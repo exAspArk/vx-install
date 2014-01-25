@@ -23,5 +23,8 @@ task :deploy => :environment do
     queue %{
       bundle install --path=#{deploy_to}/shared/bundle --without test --jobs 4
     }
+    to :launch do
+      invoke :'deploy:cleanup'
+    end
   end
 end
