@@ -6,3 +6,5 @@
 
 - name: create rabbitmq plugins
   rabbitmq_plugin: names={{ vx_mq_plugins }}
+  environment:
+    PATH: /bin:/usr/bin:/usr/lib/rabbitmq/bin
