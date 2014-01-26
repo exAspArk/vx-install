@@ -1,1 +1,14 @@
-foo: bar
+github_key: "{{ lookup('env', 'GITHUB_KEY') }}"
+github_secret: "{{ lookup('env', 'GITHUB_SECRET') }}"
+github_restriction: evrone
+
+airbrake_api_key: "{{ lookup('env', 'AIRBRAKE_API_KEY') }}"
+airbrake_host: "{{ lookup('env', 'AIRBRAKE_HOST') }}"
+
+vx_web_version: "HEAD"
+vx_web_num_workers: "{{ ansible_processor_cores }}"
+vx_web_hostname: null
+
+vx_worker_version: "HEAD"
+vx_worker_num_workers: "{{ ansible_processor_cores }}"
+vx_worker_docker_image: "dmexe/precise"

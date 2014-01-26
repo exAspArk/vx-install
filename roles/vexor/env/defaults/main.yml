@@ -1,3 +1,6 @@
+github_key: null
+github_secret: null
+
 vx_mq_vhost: "vexor"
 vx_mq_user: "vexor"
 vx_mq_host: "{{ groups['vexor-mq'][0] }}"
@@ -8,4 +11,3 @@ vx_mq_password: >
   {{ lookup('password', vx_mq_password_file + ' length=30 chars=numbers,digits') }}
 rabbitmq_url: >
   amqp://{{ vx_mq_user }}:{{ vx_mq_password }}@{{ vx_mq_host }}/{{ vx_mq_vhost }}
-

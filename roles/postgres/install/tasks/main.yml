@@ -11,7 +11,7 @@
     regexp='listen_addresses'
     line="listen_addresses = '{{ postgres_listen }}'"
     state=present
-  notify: restart service
+  notify: restart postgresql service
 
 - name: ensure service up and running
   service: name=postgresql enabled=yes state=started

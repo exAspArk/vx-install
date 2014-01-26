@@ -1,7 +1,7 @@
 require 'mina/bundler'
 require 'mina/git'
 
-set :version, "{{ vx_version }}"
+set :version, "{{ vx_worker_version }}"
 set :deploy_to, "{{ vx_home }}/worker"
 
 set :domain, 'worker.example.com'

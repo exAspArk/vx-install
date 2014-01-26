@@ -16,7 +16,7 @@
   sudo_user: "{{ vx_user }}"
   git: >
     repo="https://github.com/vexor/vx-worker.git"
-    dest={{ vx_home }}/worker/scm version={{ vx_version }}
+    dest={{ vx_home }}/worker/scm version={{ vx_worker_version }}
     update=true force=true bare=true
   register: clone_result
   environment:
@@ -28,11 +28,10 @@
     owner={{ vx_user }} mode={{ item.mode }}
   with_items:
     - { dest: "{{ vx_home}}/bin/worker", src: "worker.j2", mode: "0755" }
-    - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0640" }
+    - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0600" }
     - { dest: "/etc/init/{{ vx_service }}.conf", src: "upstart.j2", mode: "0755" }
     - { dest: "{{ vx_home }}/worker/deploy.rb", src: "deploy.rb", mode: "0644" }
   register: create_result
-  notify: restart service
 
 - name: is deploy exists
   shell: >
@@ -45,4 +44,5 @@
     {{ vx_home }}/bin/deploy {{ clone_result.after }} chdir={{ vx_home }}/worker
   sudo_user: "{{ vx_user }}"
   when: is_deploy_exists_result | changed or create_result | changed
+  notify: restart vxworker service
 

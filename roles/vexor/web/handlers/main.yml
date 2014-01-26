@@ -1,4 +1,4 @@
-- name: restart services
+- name: restart vxweb services
   service: name={{ vx_user }}-{{ item }} state=restarted
   with_items:
     - "http"

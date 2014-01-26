@@ -1,8 +1,8 @@
-vx_version: "HEAD"
+vx_web_version: "HEAD"
+vx_web_num_workers: "{{ ansible_processor_cores }}"
+vx_web_hostname: null
 
-vx_num_workers: "{{ ansible_processor_cores }}"
 vx_user: "vxweb"
-
 vx_db_name: "{{ vx_user }}_production"
 vx_db_pool: 50
 vx_db_password_file: >
