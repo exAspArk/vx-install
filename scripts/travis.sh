@@ -70,18 +70,6 @@ run_debootstrap () {
   sudo debootstrap --include="openssh-server,python,python-apt,python-pycurl" $DIST $IMAGE >> $LOG
 }
 
-setup_apt_sources () {
-  notice "setup apt sources"
-  cat <<EOF > /tmp/sources.list
-deb mirror://mirrors.ubuntu.com/mirrors.txt $DIST main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt $DIST-updates main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt $DIST-backports main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt $DIST-security main restricted universe multiverse
-EOF
-  sudo cp /tmp/sources.list $IMAGE/etc/apt/sources.list
-  sudo chroot $IMAGE /usr/bin/apt-get -qqy update >> $LOG
-}
-
 test_connection () {
   notice "test connection"
   ANSIBLE_HOST_KEY_CHECKING=False ansible --private-key=~/.ssh/id_rsa -u root -i inv/testing all -m setup >> $LOG
@@ -97,7 +85,6 @@ echo > $LOG
 
 install_packages
 run_debootstrap
-setup_apt_sources
 
 setup_root_passwd $IMAGE
 install_ssh_keys $IMAGE
