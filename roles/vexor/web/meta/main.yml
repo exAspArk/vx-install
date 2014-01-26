@@ -4,4 +4,5 @@ dependencies:
   - { role: postgres/install }
   - { role: memcache/install }
   - { role: nginx/install }
+  - { role: nodejs/install }
 
