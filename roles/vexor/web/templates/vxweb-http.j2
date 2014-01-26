@@ -1,0 +1,9 @@
+#!/bin/sh
+
+export PATH={{ vx_home }}/bin:$PATH
+export STDOUT_LOGGER=1
+
+chdir {{ vx_home }}/web/current
+
+exec {{ vx_bundle }} exec puma --config config/puma.rb
+

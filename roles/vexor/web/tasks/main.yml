@@ -37,6 +37,10 @@
   with_items:
     - "{{ vx_home }}/web"
     - "{{ vx_home }}/web/releases"
+    - "{{ vx_home }}/web/shared"
+    - "{{ vx_home }}/web/shared/tmp"
+    - "{{ vx_home }}/web/shared/tmp/pids"
+    - "{{ vx_home }}/web/shared/config"
 
 - name: create files
   template: >
@@ -44,7 +48,10 @@
     owner={{ vx_user }} mode={{ item.mode }}
   with_items:
     - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0640" }
-    - { dest: "{{ vx_home }}/web/deploy.rb", src: "deploy.rb", mode: "0644" }
+    - { dest: "{{ vx_home }}/web/deploy.rb", src: "deploy.j2", mode: "0644" }
+    - { dest: "{{ vx_home }}/web/shared/config/puma.rb", src: "puma.j2", mode: "0644" }
+    - { dest: "{{ vx_home }}/bin/{{ vx_user }}-http", src: "vxweb-http.j2", mode: "0755" }
+    - { dest: "{{ vx_home }}/bin/{{ vx_user }}-consumer", src: "vxweb-consumer.j2", mode: "0755" }
   register: create_result
 
 - name: clone repo
@@ -68,3 +75,17 @@
     {{ vx_home }}/bin/deploy {{ clone_result.after }} chdir={{ vx_home }}/web
   sudo_user: "{{ vx_user }}"
   when: is_deploy_exists_result | changed or create_result | changed
+  notify: restart services
+
+- name: create upstart jobs
+  template: dest=/etc/init/{{ vx_user }}-{{ item }}.conf src={{ item }}.upstart.j2
+  with_items:
+    - "http"
+    - "consumer"
+  notify: restart services
+
+- name: ensure services up and running
+  service: name={{vx_user}}-{{ item }} enabled=yes state=started
+  with_items:
+    - "http"
+    - "consumer"

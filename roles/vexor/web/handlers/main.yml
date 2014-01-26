@@ -1,2 +1,5 @@
-- name: restart service
-  service: name={{ vx_service }} state=restarted
+- name: restart services
+  service: name={{ vx_user }}-{{ item }} state=restarted
+  with_items:
+    - "http"
+    - "consumer"

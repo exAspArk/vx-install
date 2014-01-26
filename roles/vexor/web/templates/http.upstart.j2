@@ -1,4 +1,4 @@
-description "start and stop the vexor worker"
+description "start and stop the vexor http daemon"
 version "1.0"
 
 start on filesystem or runlevel [2345]
@@ -8,9 +8,9 @@ respawn
 console log
 
 script
-  home={{ vx_home }}/worker
+  home={{ vx_home }}/web/current
   user={{ vx_user }}
-  command="{{ vx_home }}/bin/worker"
+  command="{{ vx_home }}/bin/{{ vx_user }}-http"
 
   chdir $home
   exec su -s /bin/sh -c "$command" $user
