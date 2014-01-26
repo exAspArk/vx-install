@@ -8,8 +8,16 @@
     - "build-essential"
     - "git-core"
     - "libxml2-dev"
+    - "vx-embeded-ruby-2.0"
+    - "vx-embeded-bundler-2.0"
+    - "vx-embeded-mina-2.0"
 
-- name: fix locales
-  shell: >
-    locale-gen en_US.UTF-8 && dpkg-reconfigure -fnoninteractive locales && update-locale LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US" && touch ~/.locale_ok creates=~/locale_ok
-  when: ansible_distribution == 'Ubuntu'
+- name: create directories
+  file: dest={{ item }} state=directory
+  with_items:
+    - "{{ vx_home }}"
+    - "{{ vx_home }}/bin"
+    - "{{ vx_etc_path }}"
+
+- name: create deploy script
+  template: src=deploy.j2 dest={{ vx_home }}/bin/deploy mode="0755"

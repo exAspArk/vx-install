@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+MINA="/opt/vexor/bin/mina"
+FILE=$(pwd)/deploy.rb
+UP=$(pwd)/up
+SHA=$1
+
+if [ -z ${SHA} ] ; then
+  echo "Usage: $0 SHA"
+  exit 1
+fi
+
+force_assets=1 force_migrate=1 ${MINA} -S -f ${FILE} deploy | grep -v 'Elapsed' > $UP
+rm -f deploy.lock
+bash $UP
+
+touch current/${SHA}

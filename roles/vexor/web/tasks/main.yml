@@ -29,15 +29,12 @@
 - name: install required packages
   apt: pkg={{ item }}
   with_items:
-    - "vx-embeded-ruby-2.0"
-    - "vx-embeded-bundler-2.0"
-    - "vx-embeded-mina-2.0"
     - "nodejs"
+    - "libpq-dev"
 
 - name: create working directories
   file: dest={{ item }} state=directory owner={{ vx_user }}
   with_items:
-    - "{{ vx_etc_path }}"
     - "{{ vx_home }}/web"
     - "{{ vx_home }}/web/releases"
 
@@ -51,24 +48,21 @@
   register: create_result
 
 - name: clone repo
-  sudo_user: "{{ vx_user }}"
   git: >
     repo="https://github.com/vexor/vx-web.git"
     dest={{ vx_home }}/web/scm version={{ vx_version }}
     update=true force=true bare=true
   register: clone_result
-
-- name: generate deploy script
-  shell: >
-    force_assets=1 force_migrate=1 {{ vx_mina }} -S -f {{ vx_home }}/web/deploy.rb deploy | grep -v 'Elapsed' | tee {{ vx_home }}/web/up chdir={{ vx_home }}/web
   sudo_user: "{{ vx_user }}"
-  when: clone_result | changed or create_result | changed
-  register: script_result
 
-- name: run deploy script
+- name: is deploy exists
   shell: >
-    bash {{ vx_home }}/web/up | tee {{ vx_home }}/web/up.log chdir={{ vx_home }}/web
-  sudo_user: "{{ vx_user }}"
-  when: script_result | changed
+    test -f {{ vx_home }}/web/current/{{ clone_result.after }} && echo "yes" || echo "no"
+  register: is_deploy_exists_result
+  changed_when: "'no' in is_deploy_exists_result.stdout"
 
-- shell: cat /opt/vexor/web/up.log
+- name: run deploy
+  shell: >
+    {{ vx_home }}/bin/deploy {{ clone_result.after }} chdir={{ vx_home }}/web
+  sudo_user: "{{ vx_user }}"
+  when: is_deploy_exists_result | changed or create_result | changed
