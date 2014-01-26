@@ -1,16 +1,13 @@
 [vexor-mq]
-localhost:2201
+mq ansible_ssh_port=2201 ansible_ssh_host=localhost
 
 [vexor-web]
-localhost:2202
+web ansible_ssh_port=2202 ansible_ssh_host=localhost
 
 [vexor-worker]
-localhost:2203
+worker ansible_ssh_port=2203 ansible_ssh_host=localhost
 
 [vexor:children]
 vexor-mq
 vexor-worker
 vexor-web
-
-[vexor:vars]
-use_sudo=yes
