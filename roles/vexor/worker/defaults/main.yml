@@ -4,3 +4,7 @@ vx_worker_docker_image: "dmexe/precise"
 
 vx_user: "vxworker"
 vx_service: "vxworker"
+
+airbrake_api_key: null
+airbrake_host: null
+

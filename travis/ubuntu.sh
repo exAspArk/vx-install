@@ -67,7 +67,7 @@ install_packages () {
 
 run_debootstrap () {
   notice "run debootstrap in $IMAGE"
-  sudo debootstrap --include="openssh-server,python,python-apt,python-pycurl" $DIST $IMAGE >> $LOG
+  sudo debootstrap --include="openssh-server,python" $DIST $IMAGE >> $LOG
 }
 
 test_connection () {

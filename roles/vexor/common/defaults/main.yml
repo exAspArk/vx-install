@@ -1,5 +1,13 @@
-airbrake_api_key: null
-airbrake_host: null
+vx_mq_vhost: "vexor"
+vx_mq_user: "vexor"
+vx_mq_host: "{{ groups['vexor-mq'][0] }}"
+vx_mq_plugins: 'rabbitmq_management'
+vx_mq_password_file: >
+  ~/.ansible/credentials/{{ vx_mq_host }}/{{vx_mq_user}}.rabbitmq
+vx_mq_password: >
+  {{ lookup('password', vx_mq_password_file + ' length=30 chars=numbers,digits') }}
+rabbitmq_url: >
+  amqp://{{ vx_mq_user }}:{{ vx_mq_password }}@{{ vx_mq_host }}/{{ vx_mq_vhost }}
 
 vx_home: "/opt/vexor"
 vx_etc_path: "/etc/vexor"
@@ -8,3 +16,4 @@ vx_gem: "{{ vx_home }}/bin/gem"
 vx_bundle: "{{ vx_home }}/bin/bundle"
 vx_ruby: "{{ vx_home }}/bin/ruby"
 vx_mina: "{{ vx_home }}/bin/mina"
+
