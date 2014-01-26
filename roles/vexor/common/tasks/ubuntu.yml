@@ -1,3 +1,7 @@
+- name: setup apt sources
+  template: src=sources.j2 dest=/etc/apt/sources.list
+  register: setup_apt_sources_result
+
 - name: add vexor apt repo key
   apt_key: >
     url="http://download.opensuse.org/repositories/home:/dmexe:/vexor/xUbuntu_{{ ansible_distribution_version }}/Release.key"
@@ -11,13 +15,3 @@
   shell: >
     locale-gen en_US.UTF-8 && dpkg-reconfigure -fnoninteractive locales && update-locale LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US" && touch ~/.locale_ok creates=~/.locale_ok
   when: ansible_distribution == 'Ubuntu'
-
-- name: setup apt sources
-  template: src=sources.j2 dest=/etc/apt/sources.list
-  register: setup_apt_sources_result
-
-- name: run apt update
-  shell: apt-get -qqy update
-  when: setup_apt_sources_result | changed
-
-
