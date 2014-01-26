@@ -19,6 +19,8 @@
     dest={{ vx_home }}/worker/scm version={{ vx_version }}
     update=true force=true bare=true
   register: clone_result
+  environment:
+    GIT_SSL_NO_VERIFY: true
 
 - name: create files
   template: >
