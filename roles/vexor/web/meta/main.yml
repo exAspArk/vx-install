@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - { role: vexor/env }
   - { role: vexor/common }
   - { role: postgres/install }
   - { role: memcache/install }

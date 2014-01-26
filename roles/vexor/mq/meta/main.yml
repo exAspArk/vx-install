@@ -1,2 +1,3 @@
 dependencies:
+  - { role: vexor/env }
   - { role: rabbitmq/install }
