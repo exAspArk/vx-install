@@ -14,3 +14,10 @@
 
 - name: setup apt sources
   template: src=sources.j2 dest=/etc/apt/sources.list
+  register: setup_apt_sources_result
+
+- name: run apt update
+  shell: apt-get -qqy update
+  when: setup_apt_sources_result | changed
+
+
