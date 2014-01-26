@@ -11,6 +11,7 @@
   with_items:
     - "vx-embeded-ruby-2.0"
     - "vx-embeded-bundler-2.0"
+    - "vx-embeded-mina-2.0"
   notify: restart service
 
 - name: create working directories
@@ -42,14 +43,14 @@
 
 - name: generate deploy script
   shell: >
-    {{ vx_mina }} -S -f {{ vx_home }}/worker/deploy.rb deploy | grep -v 'Elapsed' > {{ vx_home }}/worker/up
+    {{ vx_mina }} -S -f {{ vx_home }}/worker/deploy.rb deploy | grep -v 'Elapsed' > {{ vx_home }}/worker/up chdir={{ vx_home }}/worker
   sudo_user: "{{ vx_user }}"
   when: clone_result | changed or create_result | changed
   register: script_result
 
 - name: run deploy script
   shell: >
-    bash {{ vx_home }}/worker/up > {{ vx_home }}/worker/up.log
+    bash {{ vx_home }}/worker/up > {{ vx_home }}/worker/up.log chdir={{ vx_home }}/worker
   sudo_user: "{{ vx_user }}"
   when: script_result | changed
 

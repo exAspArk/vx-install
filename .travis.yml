@@ -6,6 +6,6 @@ env:
 
 before_script:
   - "sudo service postgresql stop"
-  - "env -i HOME=/tmp DIST=$DIST PATH=$PATH DEBIAN_FRONTEND=noninteractive scripts/bootstrap.sh"
+  - "env -i HOME=$HOME DIST=$DIST PATH=$PATH DEBIAN_FRONTEND=noninteractive scripts/travis.sh"
 
-script: "sudo env -i HOME=/tmp ANSIBLE_FORCE_COLOR=2 PATH=$PATH DEBIAN_FRONTEND=noninteractive ./play testing -v --skip-tags=docker -c chroot"
+script: "sudo env -i ANSIBLE_HOST_KEY_CHECKING=False HOME=$HOME ANSIBLE_FORCE_COLOR=2 PATH=$PATH DEBIAN_FRONTEND=noninteractive ./play testing -v --skip-tags=docker --private-key=~/.ssh/id_rsa -u root"

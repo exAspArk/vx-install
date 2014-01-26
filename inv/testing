@@ -1,13 +1,16 @@
 [vexor-mq]
-/tmp/chroot-mq
+localhost:2201
 
 [vexor-web]
-/tmp/chroot-web
+localhost:2202
 
 [vexor-worker]
-/tmp/chroot-worker
+localhost:2203
 
 [vexor:children]
 vexor-mq
 vexor-worker
 vexor-web
+
+[vexor:vars]
+use_sudo=yes

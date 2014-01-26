@@ -4,6 +4,7 @@
     createhome=false system=true home={{ vx_home }}/web
 
 - name: create postgresql database
+  sudo: true
   sudo_user: postgres
   postgresql_db: >
     name={{ vx_db_name }}
@@ -30,6 +31,7 @@
   with_items:
     - "vx-embeded-ruby-2.0"
     - "vx-embeded-bundler-2.0"
+    - "vx-embeded-mina-2.0"
     - "nodejs"
 
 - name: create working directories
@@ -58,14 +60,15 @@
 
 - name: generate deploy script
   shell: >
-    force_assets=1 force_migrate=1 {{ vx_mina }} -S -f {{ vx_home }}/web/deploy.rb deploy | grep -v 'Elapsed' > {{ vx_home }}/web/up
+    force_assets=1 force_migrate=1 {{ vx_mina }} -S -f {{ vx_home }}/web/deploy.rb deploy | grep -v 'Elapsed' | tee {{ vx_home }}/web/up chdir={{ vx_home }}/web
   sudo_user: "{{ vx_user }}"
   when: clone_result | changed or create_result | changed
   register: script_result
 
 - name: run deploy script
   shell: >
-    bash {{ vx_home }}/web/up > {{ vx_home }}/web/up.log
+    bash {{ vx_home }}/web/up | tee {{ vx_home }}/web/up.log chdir={{ vx_home }}/web
   sudo_user: "{{ vx_user }}"
   when: script_result | changed
 
+- shell: cat /opt/vexor/web/up.log
