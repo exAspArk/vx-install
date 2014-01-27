@@ -49,6 +49,8 @@
     - "{{ vx_home }}/web/shared/tmp"
     - "{{ vx_home }}/web/shared/tmp/pids"
     - "{{ vx_home }}/web/shared/config"
+    - "{{ vx_home }}/web/shared/private"
+  tags: deploy
 
 - name: create files
   template: >

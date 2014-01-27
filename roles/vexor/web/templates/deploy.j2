@@ -11,7 +11,7 @@ set :branch, 'master'
 
 set :user, '{{ vx_user }}'
 
-set :shared_paths, ['log', 'config/puma.rb', 'tmp/pids']
+set :shared_paths, ['log', 'config/puma.rb', 'tmp/pids', 'private']
 
 task :environment do
   queue %{
