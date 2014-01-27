@@ -1,10 +1,20 @@
----
-- include: ubuntu.yml
+- name: fix locales
+  shell: >
+    locale-gen en_US.UTF-8 && dpkg-reconfigure -fnoninteractive locales && update-locale LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8" LANGUAGE="en_US" && touch ~/.locale_ok creates=~/.locale_ok
   when: ansible_distribution == 'Ubuntu'
 
-- name: install required packages
+- name: install packages required for ansible
   apt: pkg={{ item }}
   with_items:
-    - "build-essential"
-    - "git-core"
-    - "libxml2-dev"
+    - "python-apt"
+    - "python-pycurl"
+
+- name: add vexor apt repo key
+  apt_key: >
+    url="http://download.opensuse.org/repositories/home:/dmexe:/vexor/x{{ ansible_distribution }}_{{ ansible_distribution_version }}/Release.key"
+
+- name: add vexor apt repo
+  apt_repository: >
+    repo="deb http://download.opensuse.org/repositories/home:/dmexe:/vexor/x{{ ansible_distribution }}_{{ ansible_distribution_version }} /"
+    state=present
+

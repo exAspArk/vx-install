@@ -1,0 +1,14 @@
+---
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: configure
+  template: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: "params.j2", dest: "/etc/nginx/conf.d/params.conf" }
+  notify: restart nginx service
+
+- name: ensure service up and running
+  service: name=nginx enabled=yes state=started
+
+

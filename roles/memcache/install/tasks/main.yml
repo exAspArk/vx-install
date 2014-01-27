@@ -1,0 +1,7 @@
+- name: install memcache package
+  apt: pkg={{ item }}
+  with_items:
+    - "memcached"
+
+- name: ensure service up and running
+  service: name=memcached enabled=yes state=started

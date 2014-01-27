@@ -1,11 +1,11 @@
 [vexor-mq]
-/tmp/chroot-mq
+mq ansible_ssh_port=2201 ansible_ssh_host=localhost
 
 [vexor-web]
-/tmp/chroot-web
+web ansible_ssh_port=2202 ansible_ssh_host=localhost
 
 [vexor-worker]
-/tmp/chroot-worker
+worker ansible_ssh_port=2203 ansible_ssh_host=localhost
 
 [vexor:children]
 vexor-mq

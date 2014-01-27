@@ -1,7 +1,7 @@
 require 'mina/bundler'
 require 'mina/git'
 
-set :version, "{{ vx_version }}"
+set :version, "{{ vx_worker_version }}"
 set :deploy_to, "{{ vx_home }}/worker"
 
 set :domain, 'worker.example.com'
@@ -23,5 +23,8 @@ task :deploy => :environment do
     queue %{
       bundle install --path=#{deploy_to}/shared/bundle --without test --jobs 4
     }
+    to :launch do
+      invoke :'deploy:cleanup'
+    end
   end
 end

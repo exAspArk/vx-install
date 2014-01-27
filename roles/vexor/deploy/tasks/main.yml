@@ -1,0 +1,19 @@
+- name: install required packages
+  apt: pkg={{ item }}
+  with_items:
+    - "build-essential"
+    - "git-core"
+    - "libxml2-dev"
+    - "vx-embeded-ruby-2.0"
+    - "vx-embeded-bundler-2.0"
+    - "vx-embeded-mina-2.0"
+
+- name: create directories
+  file: dest={{ item }} state=directory
+  with_items:
+    - "{{ vx_home }}"
+    - "{{ vx_home }}/bin"
+    - "{{ vx_etc_path }}"
+
+- name: create deploy script
+  template: src=deploy.j2 dest={{ vx_home }}/bin/deploy mode="0755"

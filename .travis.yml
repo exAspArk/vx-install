@@ -4,6 +4,8 @@ env:
   - "DIST=precise"
   - "DIST=saucy"
 
-before_script: "env -i HOME=/tmp DIST=$DIST PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND scripts/bootstrap.sh"
+before_script:
+  - "sudo service postgresql stop"
+  - "env -i HOME=$HOME DIST=$DIST PATH=$PATH DEBIAN_FRONTEND=noninteractive travis/ubuntu.sh"
 
-script: "sudo env -i HOME=/tmp ANSIBLE_FORCE_COLOR=2 PATH=$PATH DEBIAN_FRONTEND=$DEBIAN_FRONTEND ansible-playbook -v --skip-tags=docker -c chroot -i inv/testing site.yml"
+script: 'sudo env -i ANSIBLE_SSH_ARGS="-o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" HOME=$HOME ANSIBLE_FORCE_COLOR=2 PATH=$PATH DEBIAN_FRONTEND=noninteractive ./play testing -v --skip-tags=docker --private-key=~/.ssh/id_rsa -u root'

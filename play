@@ -9,11 +9,7 @@ function play() {
   ansible-playbook $rest -i inv/$1 --sudo site.yml
 }
 
-case $first in
-  "vagrant")
-    play "vagrant"
-    ;;
-  *)
-    echo "Usage $0 (vagrant|testing) [options]"
-    exit 1
-esac
+test -f inv/$1 || echo "Usage $0 (vagrant|testing|production) [options]"
+test -f inv/$1 || exit 1
+
+play $1

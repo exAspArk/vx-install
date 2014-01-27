@@ -1,5 +1,10 @@
-vx_version: "HEAD"
-vx_num_workers: "{{ ansible_processor_cores }}"
-vx_docker_image: "dmexe/precise"
+vx_worker_version: "HEAD"
+vx_worker_num_workers: "{{ ansible_processor_cores }}"
+vx_worker_docker_image: "dmexe/precise"
+
 vx_user: "vxworker"
 vx_service: "vxworker"
+
+airbrake_api_key: null
+airbrake_host: null
+

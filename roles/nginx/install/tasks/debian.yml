@@ -1,0 +1,10 @@
+- name: add nginx apt repo key
+  apt_key: >
+    url=http://nginx.org/keys/nginx_signing.key
+
+- name: add nginx apt repo
+  apt_repository: >
+    repo="deb http://nginx.org/packages/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} nginx"
+
+- name: install nginx package
+  apt: pkg=nginx

@@ -6,17 +6,9 @@
     name={{ vx_user }} comment="Vexor Worker" groups=docker
     createhome=false system=true home={{ vx_home }}/worker
 
-- name: install required packages
-  apt: pkg={{ item }}
-  with_items:
-    - "vx-embeded-ruby-2.0"
-    - "vx-embeded-bundler-2.0"
-  notify: restart service
-
 - name: create working directories
   file: dest={{ item }} state=directory owner={{ vx_user }}
   with_items:
-    - "{{ vx_etc_path }}"
     - "{{ vx_home }}/worker"
     - "{{ vx_home }}/worker/releases"
 
@@ -24,9 +16,11 @@
   sudo_user: "{{ vx_user }}"
   git: >
     repo="https://github.com/vexor/vx-worker.git"
-    dest={{ vx_home }}/worker/scm version={{ vx_version }}
+    dest={{ vx_home }}/worker/scm version={{ vx_worker_version }}
     update=true force=true bare=true
   register: clone_result
+  environment:
+    GIT_SSL_NO_VERIFY: true
 
 - name: create files
   template: >
@@ -34,25 +28,21 @@
     owner={{ vx_user }} mode={{ item.mode }}
   with_items:
     - { dest: "{{ vx_home}}/bin/worker", src: "worker.j2", mode: "0755" }
-    - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0640" }
+    - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0600" }
     - { dest: "/etc/init/{{ vx_service }}.conf", src: "upstart.j2", mode: "0755" }
     - { dest: "{{ vx_home }}/worker/deploy.rb", src: "deploy.rb", mode: "0644" }
   register: create_result
-  notify: restart service
 
-- name: generate deploy script
+- name: is deploy exists
   shell: >
-    {{ vx_mina }} -S -f {{ vx_home }}/worker/deploy.rb deploy | grep -v 'Elapsed' > {{ vx_home }}/worker/up
-  sudo_user: "{{ vx_user }}"
-  when: clone_result | changed or create_result | changed
-  register: script_result
+    test -f {{ vx_home }}/worker/current/{{ clone_result.after }} && echo "yes" || echo "no"
+  register: is_deploy_exists_result
+  changed_when: "'no' in is_deploy_exists_result.stdout"
 
-- name: run deploy script
+- name: run deploy
   shell: >
-    bash {{ vx_home }}/worker/up > {{ vx_home }}/worker/up.log
+    {{ vx_home }}/bin/deploy {{ clone_result.after }} chdir={{ vx_home }}/worker
   sudo_user: "{{ vx_user }}"
-  when: script_result | changed
-
-- name: ensure service enabled and running
-  service: name={{ vx_service }} state=started enabled=yes
+  when: is_deploy_exists_result | changed or create_result | changed
+  notify: restart vxworker service
 

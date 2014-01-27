@@ -1,0 +1,17 @@
+- name: install postgres packages
+  apt: pkg={{ item }}
+  with_items:
+    - "postgresql-{{ postgres_version }}"
+    - "postgresql-contrib-{{ postgres_version }}"
+    - "python-psycopg2"
+
+- name: apply listen parameter
+  lineinfile: >
+    dest=/etc/postgresql/{{ postgres_version }}/main/postgresql.conf
+    regexp='listen_addresses'
+    line="listen_addresses = '{{ postgres_listen }}'"
+    state=present
+  notify: restart postgresql service
+
+- name: ensure service up and running
+  service: name=postgresql enabled=yes state=started
