@@ -61,6 +61,7 @@
     - { dest: "{{ vx_home }}/bin/{{ vx_user }}-http", src: "vxweb-http.j2", mode: "0755" }
     - { dest: "{{ vx_home }}/bin/{{ vx_user }}-consumer", src: "vxweb-consumer.j2", mode: "0755" }
   register: create_result
+  tags: deploy
 
 - name: clone repo
   git: >
@@ -71,18 +72,21 @@
   sudo_user: "{{ vx_user }}"
   environment:
     GIT_SSL_NO_VERIFY: true
+  tags: deploy
 
 - name: is deploy exists
   shell: >
     test -f {{ vx_home }}/web/current/{{ clone_result.after }} && echo "yes" || echo "no"
   register: is_deploy_exists_result
   changed_when: "'no' in is_deploy_exists_result.stdout"
+  tags: deploy
 
 - name: run deploy
   shell: >
     {{ vx_home }}/bin/deploy {{ clone_result.after }} chdir={{ vx_home }}/web
   sudo_user: "{{ vx_user }}"
   when: is_deploy_exists_result | changed or create_result | changed
+  tags: deploy
   notify: restart vxweb services
 
 - name: create upstart jobs
@@ -90,6 +94,7 @@
   with_items:
     - "http"
     - "consumer"
+  tags: deploy
   notify: restart vxweb services
 
 - name: ensure services up and running
