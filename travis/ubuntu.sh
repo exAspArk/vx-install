@@ -26,6 +26,7 @@ copy_image () {
 gen_ssh_key () {
   notice "generate ssh keys"
   ssh-keygen -t rsa -N "" -f /tmp/id_rsa
+  touch ~/.ssh/known_hosts
 }
 
 install_ssh_keys () {
