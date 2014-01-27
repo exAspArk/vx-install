@@ -10,7 +10,6 @@
     name={{ vx_db_name }}
     encoding='UTF-8'
     login_host=/var/run/postgresql
-    owner={{ vx_user }}
   register: create_db_result
 
 - name: create hstore extension in postgresql
