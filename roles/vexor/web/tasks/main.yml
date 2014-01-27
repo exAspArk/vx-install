@@ -4,12 +4,13 @@
     createhome=false system=true home={{ vx_home }}/web
 
 - name: create postgresql database
-  sudo: true
+  tags: create_pg_database
   sudo_user: postgres
   postgresql_db: >
     name={{ vx_db_name }}
     encoding='UTF-8'
     login_host=/var/run/postgresql
+    owner={{ vx_user }}
   register: create_db_result
 
 - name: create hstore extension in postgresql
