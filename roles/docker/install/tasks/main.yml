@@ -3,6 +3,7 @@
   when: ansible_distribution == 'Ubuntu'
 
 - name: ensure linux-image-extra is installed
+  tags: docker
   apt: pkg=linux-image-extra-{{ ansible_kernel }}
 
 - name: install docker package
