@@ -20,6 +20,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ip = "192.168.47.#{idx + 10}"
       s.vm.network :private_network, ip: ip
       s.vm.hostname = "#{name}.vexor.local"
+
+      case name
+      when  "worker"
+        s.vm.network :forwarded_port, guest: 4243, host: 4243 # docker
+      when  "web"
+        s.vm.network :forwarded_port, guest: 5432, host: 5432 # pg
+      when "mq"
+        s.vm.network :forwarded_port, guest: 5672, host: 5672 # amqp
+        s.vm.network :forwarded_port, guest: 15672, host: 15672 # amqp ui
+      end
     end
   end
 end
