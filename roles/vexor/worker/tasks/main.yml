@@ -21,6 +21,7 @@
   register: clone_result
   environment:
     GIT_SSL_NO_VERIFY: true
+  tags: deploy
 
 - name: create files
   template: >
@@ -32,12 +33,14 @@
     - { dest: "/etc/init/{{ vx_service }}.conf", src: "upstart.j2", mode: "0755" }
     - { dest: "{{ vx_home }}/worker/deploy.rb", src: "deploy.rb", mode: "0644" }
   register: create_result
+  tags: deploy
 
 - name: is deploy exists
   shell: >
     test -f {{ vx_home }}/worker/current/{{ clone_result.after }} && echo "yes" || echo "no"
   register: is_deploy_exists_result
   changed_when: "'no' in is_deploy_exists_result.stdout"
+  tags: deploy
 
 - name: run deploy
   shell: >
@@ -45,4 +48,5 @@
   sudo_user: "{{ vx_user }}"
   when: is_deploy_exists_result | changed or create_result | changed
   notify: restart vxworker service
+  tags: deploy
 
