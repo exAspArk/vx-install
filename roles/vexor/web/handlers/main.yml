@@ -1,5 +1,5 @@
 - name: restart vxweb services
-  service: name={{ vx_user }}-{{ item }} state=restarted
+  service: name={{ vx_user }}-{{ item.sv }} state={{ item.state }}
   with_items:
-    - "http"
-    - "consumer"
+    - { sv: "http", state: "reloaded" }
+    - { sv: "consumer", state: "restarted" }
