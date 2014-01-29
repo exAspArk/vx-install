@@ -1,4 +1,5 @@
 - name: restart vxweb services
+  tag: fail_on_ci
   service: name={{ vx_user }}-{{ item.sv }} state={{ item.state }}
   with_items:
     - { sv: "http", state: "reloaded" }

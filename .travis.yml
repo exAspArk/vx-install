@@ -8,4 +8,4 @@ before_script:
   - "sudo service postgresql stop"
   - "env -i HOME=$HOME DIST=$DIST PATH=$PATH DEBIAN_FRONTEND=noninteractive travis/ubuntu.sh"
 
-script: 'sudo env -i ANSIBLE_SSH_ARGS="-o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" HOME=$HOME ANSIBLE_FORCE_COLOR=2 PATH=$PATH DEBIAN_FRONTEND=noninteractive ./play testing -v --skip-tags=docker --private-key=~/.ssh/id_rsa -u root'
+script: 'sudo env -i ANSIBLE_SSH_ARGS="-o ControlMaster=auto -o ControlPersist=60s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" HOME=$HOME ANSIBLE_FORCE_COLOR=2 PATH=$PATH DEBIAN_FRONTEND=noninteractive ./play testing -v --skip-tags="docker,fail_on_ci" --private-key=~/.ssh/id_rsa -u root'
