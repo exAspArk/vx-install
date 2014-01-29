@@ -18,3 +18,4 @@ github_secret: null
 airbrake_api_key: null
 airbrake_host: null
 
+gitlab_url: null
