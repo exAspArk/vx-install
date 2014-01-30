@@ -1,8 +1,11 @@
 language: c
 
 env:
-  - "DIST=precise"
-  - "DIST=saucy"
+  matrix:
+    - "DIST=precise"
+    - "DIST=saucy"
+  allow_failures:
+    - env: "DIST=saucy"
 
 before_script:
   - "sudo service postgresql stop"
