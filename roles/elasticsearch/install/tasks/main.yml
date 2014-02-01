@@ -1,10 +1,6 @@
-- name: update apt cache
-  apt: update_cache=yes
-
-- name: install request packages
+- name: install required packages
   apt: pkg={{ item }}
   with_items:
-    - openjdk-7-jre
     - curl
 
 - name: download and unpack archive
@@ -13,7 +9,7 @@
     chdir=/opt
     creates=/opt/elasticsearch-{{ elasticsearch_version }}/bin/elasticsearch
 
-- name: create system user
+- name: create elasticseaarch user
   user: >
     name=elasticsearch comment="elasticsearch daemon"
     createhome=false system=true home=/opt/elasticsearch-{{ elasticsearch_version }}
@@ -24,25 +20,22 @@
     - /opt/elasticsearch-{{ elasticsearch_version }}/logs
     - /opt/elasticsearch-{{ elasticsearch_version }}/data
 
-- name: setup bind_host
+- name: setup elasticsearch.conf
   lineinfile: >
     dest=/opt/elasticsearch-{{ elasticsearch_version }}/config/elasticsearch.yml
-    regexp='network.host:'
-    line="network.host: {{ elasticsearch_network_host }}"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
     state=present
+  with_items:
+    - { regexp: "network.host:", line: "network.host: {{ elasticsearch_network_host }}" }
+    - { regexp: "discovery.zen.ping.multicast.enabled:", line: "discovery.zen.ping.multicast.enabled: {{ elasticsearch_multicast_discovery_enabled }}" }
   notify: restart elasticsearch service
 
-- name: setup multicast discovery
-  lineinfile: >
-    dest=/opt/elasticsearch-{{ elasticsearch_version }}/config/elasticsearch.yml
-    regexp='discovery.zen.ping.multicast.enabled:'
-    line="discovery.zen.ping.multicast.enabled: {{ elasticsearch_multicast_discovery_enabled }}"
-    state=present
-  notify: restart elasticsearch service
-
-- name: create service
+- name: create upstart job
   template: >
     dest=/etc/init/elasticsearch.conf src=upstart.j2
+  notify: restart elasticsearch service
 
 - name: ensure service up and running
   service: name=elasticsearch enabled=yes state=started
+

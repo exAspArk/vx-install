@@ -1,0 +1,51 @@
+- name: install required packages
+  apt: pkg={{ item }}
+  with_items:
+    - openssl
+
+- name: create directories
+  file: dest={{ item }} state=directory
+  with_items:
+    - /opt/logstash-{{ logstash_version }}
+
+- name: create logstash user
+  user: >
+    name=logstash comment="elasticsearch daemon"
+    createhome=false system=true home=/opt/logstash-{{ logstash_version }}
+
+- name: download package
+  get_url: >
+    url={{ logstash_download_url }}
+    dest=/opt/logstash-{{ logstash_version }}/logstash.jar
+
+- name: create directories
+  file: dest={{ item }} state=directory mode=0755 owner=logstash
+  with_items:
+    - /etc/logstash
+
+- name: generate ssl serificate for forwarder
+  shell: >
+    openssl req -x509 -batch -nodes -newkey rsa:2048 -keyout {{ logstash_forwarder_key }}.key -out {{ logstash_forwarder_key }}.crt
+    creates={{ logstash_forwarder_key }}.key
+  notify: restart logstash service
+
+- name: fixed permissions for ssl certificate
+  file: dest={{ item }} owner=logstash mode=0640
+  with_items:
+    - "{{ logstash_forwarder_key }}.key"
+    - "{{ logstash_forwarder_key }}.crt"
+
+- name: create config file
+  template: >
+    dest=/etc/logstash/indexer.conf
+    src=indexer.j2
+    mode=0644
+    owner=logstash
+  notify: restart logstash service
+
+- name: create upstart job
+  template: src=upstart.j2 dest=/etc/init/logstash.conf
+  notify: restart logstash service
+
+- name: ensure service up and running
+  service: name=logstash enabled=yes state=started

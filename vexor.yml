@@ -14,3 +14,4 @@
 - hosts: vexor-logger
   roles:
     - elasticsearch/install
+    - logstash/install
