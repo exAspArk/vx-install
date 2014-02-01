@@ -7,13 +7,16 @@
 [vexor-worker]
 192.168.47.12
 
+[vexor-logger]
+192.168.47.13
+
 [vexor:children]
 vexor-mq
 vexor-worker
 vexor-web
+vexor-logger
 
 [vexor:vars]
-use_sudo=yes
 ansible_ssh_user=vagrant
 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
 

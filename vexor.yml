@@ -10,3 +10,7 @@
 - hosts: vexor-worker
   roles:
     - vexor/worker
+
+- hosts: vexor-logger
+  roles:
+    - elasticsearch/install
