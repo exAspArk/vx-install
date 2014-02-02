@@ -14,11 +14,6 @@
 - hosts: vexor-web
   roles:
     - vexor/web
-    - role: "logstash/forwarder"
-      when: $is_logstash_installed
-      server: $logstash_server
-      files:
-        - ["vxweb", "/opt/vexor/web/shared/log/*.json"]
 
 - hosts: vexor-worker
   roles:

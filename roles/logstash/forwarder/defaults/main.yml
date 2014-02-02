@@ -1,2 +1,0 @@
-logstash_forwarder_version: "HEAD"
-logstash_forwarder_root: "/opt/logstash-forwarder"

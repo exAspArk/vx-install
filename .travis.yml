@@ -5,8 +5,9 @@ env:
     - "DIST=precise"
     - "DIST=saucy"
 
-allow_failures:
-  - env: "DIST=saucy"
+matrix:
+  allow_failures:
+    - env: "DIST=saucy"
 
 before_script:
   - "sudo service postgresql stop"

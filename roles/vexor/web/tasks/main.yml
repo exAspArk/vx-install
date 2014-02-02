@@ -110,3 +110,5 @@
 - name: add logrotate script
   template: src=logrotate.j2 dest=/etc/logrotate.d/vxweb
 
+- include: forwarder.yml
+  when: $is_logstash_installed

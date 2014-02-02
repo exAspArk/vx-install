@@ -1,0 +1,20 @@
+{
+  "network": {
+    "servers": ["{{ logstash_server }}:5043"],
+    "ssl key": "/etc/logstash-forwarder/key",
+    "ssl ca": "/etc/logstash-forwarder/crt",
+    "timeout": 15
+  },
+
+  "files": [
+    {
+      "paths": [
+        "{{ vx_home }}/web/shared/log/*.json"
+      ],
+      "fields": {
+        "type": "{{ vx_user }}"
+      }
+    }
+  ]
+}
+
