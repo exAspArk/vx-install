@@ -8,6 +8,7 @@
   with_items:
     - "python-apt"
     - "python-pycurl"
+    - "python-passlib"
 
 - name: add vexor apt repo key
   apt_key: >

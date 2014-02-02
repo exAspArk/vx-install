@@ -39,6 +39,7 @@
   with_items:
     - "nodejs"
     - "libpq-dev"
+    - "logrotate"
 
 - name: create working directories
   file: dest={{ item }} state=directory owner={{ vx_user }}
@@ -46,6 +47,7 @@
     - "{{ vx_home }}/web"
     - "{{ vx_home }}/web/releases"
     - "{{ vx_home }}/web/shared"
+    - "{{ vx_home }}/web/shared/log"
     - "{{ vx_home }}/web/shared/tmp"
     - "{{ vx_home }}/web/shared/tmp/pids"
     - "{{ vx_home }}/web/shared/config"
@@ -104,3 +106,9 @@
   with_items:
     - "http"
     - "consumer"
+
+- name: add logrotate script
+  template: src=logrotate.j2 dest=/etc/logrotate.d/vxweb
+
+- include: forwarder.yml
+  when: $is_logstash_installed

@@ -4,6 +4,8 @@ env:
   matrix:
     - "DIST=precise"
     - "DIST=saucy"
+
+matrix:
   allow_failures:
     - env: "DIST=saucy"
 

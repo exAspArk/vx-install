@@ -1,0 +1,19 @@
+input {
+  lumberjack {
+    port => 5043
+
+    ssl_certificate => "{{ logstash_root }}/config/forwarder.crt"
+    ssl_key => "{{ logstash_root }}/config/forwarder.key"
+
+    type  => "lumberjack"
+    codec => "json"
+
+  }
+}
+
+output {
+  elasticsearch {
+    host => "127.0.0.1"
+    bind_host => "127.0.0.1"
+  }
+}

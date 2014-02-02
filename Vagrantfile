@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box_url = 'http://files.vagrantup.com/precise64_vmware.box'
   end
 
-  %w{ mq web worker }.each_with_index do |name, idx|
+  %w{ mq web worker logger }.each_with_index do |name, idx|
     config.vm.define name.to_sym do |s|
       ip = "192.168.47.#{idx + 10}"
       s.vm.network :private_network, ip: ip

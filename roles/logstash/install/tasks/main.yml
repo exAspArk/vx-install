@@ -1,0 +1,51 @@
+- name: create logstash user
+  user: >
+    name=logstash comment="logstash daemon"
+    createhome=false system=true home={{ logstash_root }}
+
+- name: create directories
+  file: dest={{ item }} state=directory owner=logstash
+  with_items:
+    - "{{ logstash_root }}"
+    - "{{ logstash_root }}/config"
+
+- name: download package
+  get_url: >
+    url={{ logstash_download_url }}
+    dest={{ logstash_root }}/logstash.jar
+
+- name: generate ssl serificate for forwarder
+  sudo: false
+  connection: local
+  shell: >
+    mkdir -p $(dirname {{ item[0] }}) &&
+    openssl req -x509 -batch -nodes -newkey rsa:2048 -keyout {{ item[1] }} -out {{ item[0] }}
+    creates={{ item[0] }}
+  with_nested:
+    - "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.crt"
+    - "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.key"
+  register: generate_result
+
+- name: download certificates
+  copy: src={{ item.l }} dest={{ item.r }} owner=logstash mode=0640
+  with_items:
+    - { l: "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.crt", r: "{{ logstash_root }}/config/forwarder.crt" }
+    - { l: "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.key", r: "{{ logstash_root }}/config/forwarder.key" }
+  notify: restart logstash service
+
+- name: create config file
+  template: >
+    dest={{ logstash_root }}/config/indexer.conf
+    src=indexer.j2
+    mode=0644
+    owner=logstash
+  notify: restart logstash service
+
+- name: create upstart job
+  template: src=upstart.j2 dest=/etc/init/logstash.conf
+  notify: restart logstash service
+
+- name: ensure service up and running
+  service: name=logstash enabled=yes state=started
+
+- include: kibana.yml

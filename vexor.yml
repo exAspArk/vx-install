@@ -1,7 +1,16 @@
 ---
+- hosts: all
+  vars:
+
 - hosts: vexor-mq
   roles:
     - vexor/mq
+
+- hosts: vexor-logger
+  roles:
+    - vexor/common
+    - elasticsearch/install
+    - logstash/install
 
 - hosts: vexor-web
   roles:
@@ -10,3 +19,4 @@
 - hosts: vexor-worker
   roles:
     - vexor/worker
+
