@@ -6,7 +6,7 @@ vx_user: "vxweb"
 vx_db_name: "{{ vx_user }}_production"
 vx_db_pool: 50
 vx_db_password_file: >
-  ~/.ansible/credentials/{{ inventory_hostname }}/{{ vx_user }}.postgres
+  "{{ credentials_dir }}/{{vx_user}}.postgres"
 vx_db_password: >
   {{ lookup('password', vx_db_password_file + ' length=30 chars=numbers,digits') }}
 vx_db_url: >

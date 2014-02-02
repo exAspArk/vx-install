@@ -7,8 +7,8 @@
   tags: logstash
   copy: src={{ item.l }} dest={{ item.r }} mode=0640
   with_items:
-    - { l: "~/.ansible/credentials/{{ logstash_server }}/forwarder.crt", r: "/etc/logstash-forwarder/crt" }
-    - { l: "~/.ansible/credentials/{{ logstash_server }}/forwarder.key", r: "/etc/logstash-forwarder/key" }
+    - { l: "{{ credentials_dir }}/logstash/forwarder.crt", r: "/etc/logstash-forwarder/crt" }
+    - { l: "{{ credentials_dir }}/logstash/forwarder.crt", r: "/etc/logstash-forwarder/key" }
   notify: restart logstash-forwarder service
 
 - name: create logstash-forwarder configuration file

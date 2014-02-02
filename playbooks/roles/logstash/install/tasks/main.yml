@@ -22,15 +22,15 @@
     openssl req -x509 -batch -nodes -newkey rsa:2048 -keyout {{ item[1] }} -out {{ item[0] }}
     creates={{ item[0] }}
   with_nested:
-    - "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.crt"
-    - "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.key"
+    - "{{ credentials_dir }}/logstash/forwarder.crt"
+    - "{{ credentials_dir }}/logstash/forwarder.key"
   register: generate_result
 
 - name: download certificates
   copy: src={{ item.l }} dest={{ item.r }} owner=logstash mode=0640
   with_items:
-    - { l: "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.crt", r: "{{ logstash_root }}/config/forwarder.crt" }
-    - { l: "~/.ansible/credentials/{{ inventory_hostname }}/forwarder.key", r: "{{ logstash_root }}/config/forwarder.key" }
+    - { l: "{{ credentials_dir }}/logstash/forwarder.crt", r: "{{ logstash_root }}/config/forwarder.crt" }
+    - { l: "{{ credentials_dir }}/logstash/forwarder.key", r: "{{ logstash_root }}/config/forwarder.key" }
   notify: restart logstash service
 
 - name: create config file

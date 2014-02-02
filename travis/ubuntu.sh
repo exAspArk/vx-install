@@ -82,7 +82,7 @@ EOF
 
 test_connection () {
   notice "test connection"
-  ANSIBLE_HOST_KEY_CHECKING=False ansible --private-key=~/.ssh/id_rsa -u root -i inv/testing all -m setup >> $LOG
+  ANSIBLE_HOST_KEY_CHECKING=False ansible --private-key=~/.ssh/id_rsa -u root -i inventory/testing all -m setup >> $LOG
 }
 
 setup_container () {

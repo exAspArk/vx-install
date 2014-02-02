@@ -6,10 +6,10 @@ first=$1
 rest=${*:2}
 
 function play() {
-  ansible-playbook $rest -i inv/$1 --sudo site.yml
+  ansible-playbook $rest -i inventory/$1 --sudo playbooks/site.yml
 }
 
-test -f inv/$1 || echo "Usage $0 (vagrant|testing|production) [options]"
-test -f inv/$1 || exit 1
+test -f inventory/$1 || echo "Usage $0 (vagrant|testing|production) [options]"
+test -f inventory/$1 || exit 1
 
 play $1

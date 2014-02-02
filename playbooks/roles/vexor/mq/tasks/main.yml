@@ -1,6 +1,8 @@
 - name: create rabbitmq vhost
   rabbitmq_vhost: name={{ vx_mq_vhost }}
 
+- debug: msg="{{ vx_mq_password_file }}"
+
 - name: create rabbitmq user
   rabbitmq_user: >
     name={{ vx_mq_user }}
