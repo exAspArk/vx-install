@@ -1,0 +1,16 @@
+- name: clone elasticsearch-logstash-index-mgmt repo
+  tags: mgmt
+  git: >
+    repo="https://github.com/imperialwicket/elasticsearch-logstash-index-mgmt.git"
+    dest=/opt/elasticsearch-logstash-index-mgmt
+    version=c95ffe6e5eb35d4c691b1648eaff8542673bf48a
+    update=true force=true
+
+- name: install cron job to cleanup old indexes
+  tags: mgmt
+  cron: >
+    minute=0
+    hour=6
+    name="cleanup logstash indexes"
+    user=logstash
+    job="/bin/bash /opt/elasticsearch-logstash-index-mgmt/elasticsearch-remove-old-indices.sh -i 7"

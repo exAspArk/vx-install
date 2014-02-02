@@ -48,4 +48,6 @@
 - name: ensure service up and running
   service: name=logstash enabled=yes state=started
 
+- include: mgmt.yml
+
 - include: kibana.yml
