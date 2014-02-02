@@ -5,7 +5,9 @@ input {
     ssl_certificate => "{{ logstash_root }}/config/forwarder.crt"
     ssl_key => "{{ logstash_root }}/config/forwarder.key"
 
-    type => "lumberjack"
+    type  => "lumberjack"
+    codec => "json"
+
   }
 }
 

@@ -9,10 +9,18 @@
   "files": [
     {
       "paths": [
-        "{{ vx_home }}/web/shared/log/*.json"
+        "{{ vx_home }}/web/shared/log/consumers.*.json"
       ],
       "fields": {
-        "type": "{{ vx_user }}"
+        "type": "vxweb.consumers"
+      }
+    } ,
+    {
+      "paths": [
+        "{{ vx_home }}/web/shared/log/http.*.json"
+      ],
+      "fields": {
+        "type": "vxweb.http"
       }
     }
   ]

@@ -1,0 +1,28 @@
+- name: install packages required for kibana
+  tags: kibana
+  apt: pkg=git-core
+
+- name: checkout kibana repo
+  tags: kibana
+  git: >
+    repo="https://github.com/elasticsearch/kibana.git"
+    dest=/opt/kibana version=HEAD
+    update=true force=true
+  register: checkout_result
+
+- name: create htpasswd file for kibana vhost
+  tags: kibana
+  htpasswd: >
+    path=/etc/nginx/kibana.htpasswd
+    name=kibana
+    password="{{ logstash_kibana_password }}"
+    owner=root
+    group=nginx
+    mode=0640
+  notify: restart nginx service
+
+- name: create nginx vhost for kibana
+  tags: kibana
+  template: src=nginx.j2 dest=/etc/nginx/conf.d/default.conf
+  notify: restart nginx service
+

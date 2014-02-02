@@ -8,6 +8,7 @@
 
 - hosts: vexor-logger
   roles:
+    - vexor/common
     - elasticsearch/install
     - logstash/install
 
