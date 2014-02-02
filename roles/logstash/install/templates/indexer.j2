@@ -1,9 +1,9 @@
 input {
   lumberjack {
-    port => 12345
+    port => 5043
 
-    ssl_certificate => "{{ logstash_forwarder_key }}.crt"
-    ssl_key => "{{ logstash_forwarder_key }}.key"
+    ssl_certificate => "{{ logstash_root }}/config/forwarder.crt"
+    ssl_key => "{{ logstash_root }}/config/forwarder.key"
 
     type => "lumberjack"
   }

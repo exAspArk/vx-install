@@ -1,0 +1,20 @@
+{
+  "network": {
+    "servers": ["{{ server }}:5043"],
+    "ssl key": "./forwarder.key",
+    "ssl ca": "./forwarder.crt",
+    "timeout": 15
+  },
+
+  "files": [
+    {% for file in files %}
+    {
+      "paths": [
+        "{{ file[1] }}"
+      ],
+      "fields": { "type": "{{ file[0] }}" }
+    }
+    {% if not loop.last %}, {% endif %}
+    {% endfor %}
+  ]
+}

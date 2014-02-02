@@ -1,17 +1,26 @@
 ---
+- hosts: all
+  vars:
+
 - hosts: vexor-mq
   roles:
     - vexor/mq
-
-- hosts: vexor-web
-  roles:
-    - vexor/web
-
-- hosts: vexor-worker
-  roles:
-    - vexor/worker
 
 - hosts: vexor-logger
   roles:
     - elasticsearch/install
     - logstash/install
+
+- hosts: vexor-web
+  roles:
+    - vexor/web
+    - role: "logstash/forwarder"
+      when: $is_logstash_installed
+      server: $logstash_server
+      files:
+        - ["vxweb", "/opt/vexor/web/shared/log/*.json"]
+
+- hosts: vexor-worker
+  roles:
+    - vexor/worker
+

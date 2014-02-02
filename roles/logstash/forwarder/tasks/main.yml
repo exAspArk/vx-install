@@ -1,0 +1,37 @@
+---
+- name: add golang repository
+  apt_repository: repo=ppa:duh/golang
+  tags: logstash
+
+- name: install required packages
+  tags: logstash
+  apt: pkg={{ item }}
+  with_items:
+    - golang
+    - rsync
+
+- name: checkout logstash-forwarder repo
+  tags: logstash
+  git: >
+    repo="https://github.com/elasticsearch/logstash-forwarder"
+    dest=/opt/logstash-forwarder version={{ logstash_forwarder_version }}
+    update=true force=true
+  register: checkout_result
+
+- name: compile logstash-forwarder
+  tags: logstash
+  shell: >
+    go build
+    chdir=/opt/logstash-forwarder
+  when: checkout_result | changed
+
+- name: create configuration file
+  tags: logstash
+  template: src=config.j2 dest=/opt/logstash-forwarder/forwarder.conf
+
+- name: download certificates
+  tags: logstash
+  copy: src={{ item.l }} dest={{ item.r }} mode=0640
+  with_items:
+    - { l: "~/.ansible/credentials/{{ server }}/forwarder.crt", r: "{{ logstash_forwarder_root }}/forwarder.crt" }
+    - { l: "~/.ansible/credentials/{{ server }}/forwarder.key", r: "{{ logstash_forwarder_root }}/forwarder.key" }
