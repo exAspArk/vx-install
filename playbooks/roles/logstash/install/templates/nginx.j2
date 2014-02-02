@@ -1,6 +1,6 @@
 server {
 
-  listen  {{ inventory_hostname }}:9200 ;
+  listen  {{ ansible_default_ipv4.address }}:9200 ;
 
   server_name           _;
 
