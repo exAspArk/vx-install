@@ -1,4 +1,7 @@
 ---
+- debug: var=inventory_dir
+  tags: logstash
+
 - name: add golang repository
   apt_repository: repo=ppa:duh/golang
   tags: logstash
