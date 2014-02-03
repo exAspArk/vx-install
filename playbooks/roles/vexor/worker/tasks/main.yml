@@ -50,3 +50,9 @@
   notify: restart vxworker service
   tags: deploy
 
+- name: add logrotate script
+  template: src=logrotate.j2 dest=/etc/logrotate.d/{{ vx_user }}
+
+- include: forwarder.yml
+  tags: forwarder
+  when: "{{ logstash_server | length > 0 }}"

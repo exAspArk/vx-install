@@ -1,0 +1,19 @@
+- name: install logstash-forwarder package
+  apt: pkg={{ item }}
+  with_items:
+    - logstash-forwarder
+
+- name: download logstash-forwarder certificates
+  tags: logstash
+  copy: src={{ item.l }} dest={{ item.r }} mode=0640
+  with_items:
+    - { l: "{{ credentials_dir }}/logstash/forwarder.crt", r: "/etc/logstash-forwarder/crt" }
+    - { l: "{{ credentials_dir }}/logstash/forwarder.crt", r: "/etc/logstash-forwarder/key" }
+  notify: restart logstash-forwarder service
+
+- name: create logstash-forwarder configuration file
+  template: src=forwarder.j2 dest=/etc/logstash-forwarder/logstash-forwarder.conf
+  notify: restart logstash-forwarder service
+
+- name: ensure logstash-forwarder service up and running
+  service: name=logstash-forwarder state=running enabled=yes

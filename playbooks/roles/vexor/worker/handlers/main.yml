@@ -1,2 +1,5 @@
 - name: restart vxworker service
   service: name={{ vx_service }} state=restarted
+
+- name: restart logstash-forwarder service
+  service: name=logstash-forwarder state=restarted

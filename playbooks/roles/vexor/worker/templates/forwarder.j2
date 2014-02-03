@@ -1,0 +1,20 @@
+{
+  "network": {
+    "servers": ["{{ logstash_server }}"],
+    "ssl key": "/etc/logstash-forwarder/key",
+    "ssl ca": "/etc/logstash-forwarder/crt",
+    "timeout": 15
+  },
+
+  "files": [
+    {
+      "paths": [
+        "{{ vx_home }}/worker/shared/log/*.json"
+      ],
+      "fields": {
+        "type": "vxworker"
+      }
+    }
+  ]
+}
+

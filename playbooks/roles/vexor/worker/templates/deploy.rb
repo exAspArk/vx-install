@@ -6,9 +6,11 @@ set :deploy_to, "{{ vx_home }}/worker"
 
 set :domain, 'worker.example.com'
 set :repository, 'git://github.com/vexor/vx-worker.git'
-set :branch, 'master'
+set :branch, 'logger'
 
 set :user, '{{ vx_user }}'
+
+set :shared_paths, ['log']
 
 task :environment do
   queue %{
@@ -16,10 +18,16 @@ task :environment do
   }
 end
 
+task :setup => :environment do
+  queue %[mkdir -p "#{deploy_to}/shared/log"]
+  queue %[chmod g+rx,u+rwx "#{deploy_to}/shared/log"]
+end
+
 desc "Deploys the current version to the server."
-task :deploy => :environment do
+task :deploy => :setup do
   deploy do
     invoke :'git:clone'
+    invoke :'deploy:link_shared_paths'
     queue %{
       bundle install --path=#{deploy_to}/shared/bundle --without test --jobs 4
     }
