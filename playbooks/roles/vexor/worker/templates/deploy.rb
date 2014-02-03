@@ -6,7 +6,7 @@ set :deploy_to, "{{ vx_home }}/worker"
 
 set :domain, 'worker.example.com'
 set :repository, 'git://github.com/vexor/vx-worker.git'
-set :branch, 'logger'
+set :branch, 'master'
 
 set :user, '{{ vx_user }}'
 
