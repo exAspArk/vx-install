@@ -24,6 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       case name
       when  "worker"
         s.vm.network :forwarded_port, guest: 4243, host: 4243 # docker
+        s.vm.network :forwarded_port, guest: 2022, host: 2122 # docker
       when  "web"
         s.vm.network :forwarded_port, guest: 5432, host: 5432 # pg
       when "mq"
