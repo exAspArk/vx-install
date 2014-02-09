@@ -29,7 +29,7 @@
     owner={{ vx_user }} mode={{ item.mode }}
   with_items:
     - { dest: "{{ vx_home}}/bin/worker", src: "worker.j2", mode: "0755" }
-    - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0600" }
+    - { dest: "{{ vx_etc_path}}/Envfile", src: "env.j2", mode: "0600" }
     - { dest: "/etc/init/{{ vx_service }}.conf", src: "upstart.j2", mode: "0755" }
     - { dest: "{{ vx_home }}/worker/deploy.rb", src: "deploy.rb", mode: "0644" }
   register: create_result

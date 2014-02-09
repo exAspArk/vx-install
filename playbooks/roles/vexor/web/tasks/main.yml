@@ -59,7 +59,7 @@
     dest={{ item.dest }} src={{ item.src }}
     owner={{ vx_user }} mode={{ item.mode }}
   with_items:
-    - { dest: "{{ vx_etc_path}}/ci", src: "env.j2", mode: "0600" }
+    - { dest: "{{ vx_etc_path}}/Envfile", src: "env.j2", mode: "0600" }
     - { dest: "{{ vx_home }}/web/deploy.rb", src: "deploy.j2", mode: "0644" }
     - { dest: "{{ vx_home }}/web/shared/config/puma.rb", src: "puma.j2", mode: "0644" }
     - { dest: "{{ vx_home }}/bin/{{ vx_user }}-http", src: "vxweb-http.j2", mode: "0755" }
