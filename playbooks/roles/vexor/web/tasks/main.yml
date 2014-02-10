@@ -70,7 +70,7 @@
 - name: clone repo
   git: >
     repo="https://github.com/vexor/vx-web.git"
-    dest={{ vx_home }}/web/scm version={{ vx_web_version }}
+    dest={{ vx_home }}/web/scm version={{ vx_web_branch }}
     update=true force=true bare=true
   register: clone_result
   sudo_user: "{{ vx_user }}"

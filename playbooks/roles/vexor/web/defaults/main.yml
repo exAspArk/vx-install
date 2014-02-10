@@ -1,4 +1,3 @@
-vx_web_version: "HEAD"
 vx_web_num_workers: "{{ ansible_processor_cores }}"
 vx_web_hostname: null
 vx_web_branch: "master"
