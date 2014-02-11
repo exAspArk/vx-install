@@ -7,6 +7,7 @@
     - docker
     - linux-image-extra
   apt: pkg=linux-image-extra-{{ ansible_kernel }}
+  when: ansible_distribution_version != '12.04'
 
 - name: install docker package
   tags: docker
