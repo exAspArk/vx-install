@@ -53,12 +53,6 @@
 - name: add logrotate script
   template: src=logrotate.j2 dest=/etc/logrotate.d/{{ vx_user }}
 
-- name: pull docker image
-  action: shell docker pull {{ vx_worker_docker_image }}
-  register: docker_pull_result
-  until: docker_pull_result.stdout.find("Download complete") != -1
-  retries: 20
-
 - include: forwarder.yml
   tags: forwarder
   when: "{{ logstash_server | length > 0 }}"
