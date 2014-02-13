@@ -2,3 +2,5 @@
 .env
 inventory/production
 credentials/
+packer/upload.tgz
+*.pem

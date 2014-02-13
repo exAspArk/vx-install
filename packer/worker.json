@@ -1,41 +1,42 @@
 {
+  "variables": {
+    "os_username": "{{env `SDK_USERNAME`}}",
+    "os_token": "{{env `SDK_TOKEN`}}"
+  },
+
   "builders": [
     {
-      "type":          "amazon-ebs",
-      "region":        "eu-west-1",
-      "source_ami":    "ami-8e987ef9",
-      "instance_type": "c3.xlarge",
-      "ssh_username":  "ubuntu",
-      "ami_name":      "packer-quick-start {{timestamp}}"
+      "type":          "openstack",
+      "region":        "IAD",
+      "ssh_username":  "root",
+      "image_name":    "vexor_ci.worker {{timestamp}}",
+      "source_image":  "2ab974de-9fe5-4f5b-9d58-766a59f3de61",
+      "flavor":        "performance1-4",
+      "provider":      "rackspace-us"
     }
   ],
   "provisioners": [
     {
       "type":          "shell",
-      "script":        "packer/base.sh"
+      "script":        "packer/before.sh"
+    },
+    {
+      "type":          "file",
+      "source":        "packer/upload.tgz",
+      "destination":   "/tmp/provision/upload.tgz"
     },
     {
       "type":          "shell",
-      "start_retry_timeout": "5m",
-      "inline": [
-        "echo ready",
-        "mkdir -p /tmp/ansible"
+      "script":        "packer/provision.sh"
+    },
+    {
+      "type":          "shell",
+      "script":        "packer/rackspace.sh",
+      "environment_vars": [
+        "OS_REGION_NAME=IAD",
+        "OS_PASSWORD={{user `os_token`}}",
+        "OS_USERNAME={{user `os_username`}}"
       ]
-    },
-    {
-      "type":          "file",
-      "source":        "credentials/",
-      "destination":   "/tmp/ansible/credentials"
-    },
-    {
-      "type":          "file",
-      "source":        "inventory/",
-      "destination":   "/tmp/ansible/inventory"
-    },
-    {
-      "type":          "file",
-      "source":        "playbooks/",
-      "destination":   "/tmp/ansible/playbooks"
     }
   ]
 }
