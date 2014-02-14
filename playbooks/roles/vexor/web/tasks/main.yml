@@ -108,7 +108,7 @@
     - "consumer"
 
 - name: add logrotate script
-  template: src=logrotate.j2 dest=/etc/logrotate.d/{{ vx_user }}
+  template: src=logrotate.j2 dest=/etc/logrotate.d/{{ vx_user }} mode="0644" owner=root
 
 - include: forwarder.yml
   tags: forwarder
