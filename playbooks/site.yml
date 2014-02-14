@@ -1,2 +1,3 @@
 ---
-- include: vexor.yml
+- hosts: vexor
+  include: vexor.yml

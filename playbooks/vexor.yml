@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: vexor
   vars:
 
 - hosts: vexor-mq
