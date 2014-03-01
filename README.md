@@ -20,7 +20,7 @@ More [http://vexor.io](http://vexor.io)
 
 ### Prerequisites
 
-You will need 2 (better 3) Ubuntu 12.04 or 13.10 servers to host, respectively:
+You will need 2 (better 3) Ubuntu 12.04 or 13.10 servers to host, __x64__ necessarily, respectively:
 
 * Web application
 * Worker
