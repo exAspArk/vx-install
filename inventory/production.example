@@ -26,4 +26,4 @@ gitlab_url=http://demo.gitlab.com,gitlab.example.com
 # vx_web_num_workers=8
 
 # vx_worker_num_workers=3
-# vx_worker_docker_image: "dmexe/vexor-precise-full"
+# vx_worker_docker_image="dmexe/vexor-precise-full"
