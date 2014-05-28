@@ -7,3 +7,5 @@ user={{ vx_user }}
 command="{{ vx_home }}/bin/worker"
 
 start-stop-daemon -S -d $home -c $user:$user -g docker -x $command -- --once
+
+echo "DONE"

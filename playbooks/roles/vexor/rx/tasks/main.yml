@@ -1,9 +1,8 @@
 - name: install required packages
   apt: pkg=python-pip
--
+
 - name: install novaclient
   pip: name=rackspace-novaclient
-  apt: pkg=python-novaclient
 
 - name: pull docker image
   action: shell docker pull {{ item }}
