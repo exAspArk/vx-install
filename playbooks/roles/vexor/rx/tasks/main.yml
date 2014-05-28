@@ -4,5 +4,21 @@
 - name: install novaclient
   pip: name=rackspace-novaclient
 
+- name: pull docker image
+  action: shell docker pull {{ item }}
+  register: result
+  until: result.stdout.find("Download complete") != -1
+  retries: 20
+  with_items:
+    - "dmexe/vexor-precise-full"
+    - "dmexe/vexor-precise"
+
 - name: create rx_shutdown
   template: src=rx_shutdown.j2 dest=/usr/sbin/rx_shutdown mode=0755
+
+- name: create rx-vxworker
+  template: >
+    dest={{ item.dest }} src={{ item.src }}
+    owner={{ vx_user }} mode={{ item.mode }}
+  with_items:
+    - { dest: "{{ vx_home }}/bin/vxworker-rx", src: "vxworker-rx.j2", mode: "0755" }
