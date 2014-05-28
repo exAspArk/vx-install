@@ -1,8 +1,9 @@
 - name: install required packages
   apt: pkg=python-pip
-
+-
 - name: install novaclient
   pip: name=rackspace-novaclient
+  apt: pkg=python-novaclient
 
 - name: pull docker image
   action: shell docker pull {{ item }}
@@ -16,9 +17,9 @@
 - name: create rx_shutdown
   template: src=rx_shutdown.j2 dest=/usr/sbin/rx_shutdown mode=0755
 
-- name: create rx-vxworker
+- name: create files
   template: >
-    dest={{ item.dest }} src={{ item.src }}
-    owner={{ vx_user }} mode={{ item.mode }}
+    dest={{ item.dest }} src={{ item.src }} mode={{ item.mode }}
   with_items:
-    - { dest: "{{ vx_home }}/bin/vxworker-rx", src: "vxworker-rx.j2", mode: "0755" }
+    - { dest: "{{ vx_home }}/bin/worker-rx", src: "worker-rx.j2", mode: "0755" }
+    - { dest: "/etc/rc.local", src: "rc.local.j2", mode: "0755" }
