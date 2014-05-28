@@ -18,3 +18,8 @@
 - hosts: vexor-worker
   roles:
     - vexor/worker
+
+- hosts: vexor-worker-rx
+  roles:
+    - vexor/worker
+    - vexor/rx

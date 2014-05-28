@@ -4,3 +4,4 @@ inventory/production
 credentials/
 packer/upload.tgz
 *.pem
+packer/os_shutdown

@@ -1,0 +1,8 @@
+- name: install required packages
+  apt: pkg=python-pip
+
+- name: install novaclient
+  pip: name=rackspace-novaclient
+
+- name: create rx_shutdown
+  template: src=rx_shutdown.j2 dest=/usr/sbin/rx_shutdown mode=0755

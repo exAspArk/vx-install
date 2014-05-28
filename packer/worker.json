@@ -1,42 +1,48 @@
 {
-  "variables": {
-    "os_username": "{{env `SDK_USERNAME`}}",
-    "os_token": "{{env `SDK_TOKEN`}}"
-  },
-
   "builders": [
     {
-      "type":          "openstack",
-      "region":        "IAD",
-      "ssh_username":  "root",
-      "image_name":    "vexor_ci.worker {{timestamp}}",
-      "source_image":  "2ab974de-9fe5-4f5b-9d58-766a59f3de61",
-      "flavor":        "performance1-4",
-      "provider":      "rackspace-us"
+      "flavor": "performance1-4",
+      "image_name": "vexor_ci.worker {{timestamp}}",
+      "provider": "rackspace-us",
+      "region": "IAD",
+      "source_image": "bb02b1a3-bc77-4d17-ab5b-421d89850fca",
+      "ssh_username": "root",
+      "type": "openstack"
     }
   ],
+  "post-processors": null,
   "provisioners": [
     {
-      "type":          "shell",
-      "script":        "packer/before.sh"
+      "script": "packer/before.sh",
+      "type": "shell"
     },
     {
-      "type":          "file",
-      "source":        "packer/upload.tgz",
-      "destination":   "/tmp/provision/upload.tgz"
+      "destination": "/tmp/provision/",
+      "source": "playbooks/",
+      "type": "file"
     },
     {
-      "type":          "shell",
-      "script":        "packer/provision.sh"
+      "destination": "/tmp/provision/",
+      "source": "inventory/",
+      "type": "file"
     },
     {
-      "type":          "shell",
-      "script":        "packer/rackspace.sh",
+      "script": "packer/provision.sh",
+      "type": "shell"
+    },
+    {
       "environment_vars": [
         "OS_REGION_NAME=IAD",
         "OS_PASSWORD={{user `os_token`}}",
         "OS_USERNAME={{user `os_username`}}"
-      ]
+      ],
+      "script": "packer/rackspace.sh",
+      "type": "shell"
     }
-  ]
+  ],
+  "variables": {
+    "os_token": "{{env `SDK_TOKEN`}}",
+    "os_username": "{{env `SDK_USERNAME`}}"
+  }
 }
+
