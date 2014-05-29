@@ -3,6 +3,8 @@
 set -e
 set -x
 
+export PATH=$PATH:/usr/local/bin
+
 export OS_REGION_NAME={{ rx_region }}
 export OS_USERNAME={{ rx_user }}
 export OS_TENANT_NAME=none
