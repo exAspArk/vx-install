@@ -64,6 +64,7 @@
     - { dest: "{{ vx_home }}/web/shared/config/puma.rb", src: "puma.j2", mode: "0644" }
     - { dest: "{{ vx_home }}/bin/{{ vx_user }}-http", src: "vxweb-http.j2", mode: "0755" }
     - { dest: "{{ vx_home }}/bin/{{ vx_user }}-consumer", src: "vxweb-consumer.j2", mode: "0755" }
+    - { dest: "{{ vx_home }}/bin/{{ vx_user }}-as-notifier", src: "vxweb-as-notifier.j2", mode: "0755" }
   register: create_result
   tags: deploy
 
@@ -98,6 +99,7 @@
   with_items:
     - "http"
     - "consumer"
+    - "as-notifier"
   tags: deploy
   notify: restart vxweb services
 
