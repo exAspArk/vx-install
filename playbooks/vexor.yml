@@ -15,6 +15,10 @@
   roles:
     - vexor/web
 
+- hosts: vexor-as
+  roles:
+    - vexor/auto_scale
+
 - hosts: vexor-worker
   roles:
     - vexor/worker
